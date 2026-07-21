@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
+use App\Services\ClickStats;
 use App\Services\LinkService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,5 +45,18 @@ class LinkController extends Controller
         $links->deactivate($link);
 
         return redirect()->route('panel');
+    }
+
+    public function stats(Request $request, Link $link, ClickStats $stats): View
+    {
+        abort_unless($link->user_id === $request->user()?->id, 403);
+
+        $excludeBots = $request->boolean('exclude_bots');
+
+        return view('panel.stats', [
+            'link' => $link,
+            'excludeBots' => $excludeBots,
+            'stats' => $stats->forLink($link, $excludeBots),
+        ]);
     }
 }

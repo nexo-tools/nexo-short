@@ -58,17 +58,18 @@
                             @endif
                         </td>
                         <td>
-                            @if ($link->is_active)
-                                <form method="POST" action="{{ route('links.deactivate', $link) }}">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" style="background: #3f1d1d; color: #fca5a5; padding: .3rem .6rem; font-size: .8rem;">
-                                        {{ __('Deactivate') }}
-                                    </button>
-                                </form>
-                            @else
-                                <span class="muted">—</span>
-                            @endif
+                            <div style="display: flex; gap: .75rem; align-items: center;">
+                                <a href="{{ route('links.stats', $link) }}">{{ __('Stats') }}</a>
+                                @if ($link->is_active)
+                                    <form method="POST" action="{{ route('links.deactivate', $link) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" style="background: #3f1d1d; color: #fca5a5; padding: .3rem .6rem; font-size: .8rem;">
+                                            {{ __('Deactivate') }}
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
