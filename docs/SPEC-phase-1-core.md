@@ -175,6 +175,13 @@ reality; owner sign-off.
   (favicons/OG/PWA) are **not generated/committed in Phase 1**: they are public-surface
   assets consumed by the landing (Phase 5), and Phase 1 is dark. Run `npm run brand` to
   produce them. `sharp`/`png-to-ico` are `optionalDependencies` so CI stays lean.
+- **2026-07-20 (1.6)** — The branded 404's report link points at `//{short_host}/report`,
+  which is a reserved slug that 404s until the report page ships in Phase 3 (ADR-005 §7).
+  The link is forward-looking on purpose; it goes live when Phase 3 adds the page.
+- **2026-07-20 (1.6)** — Host routing: instead of constraining both hosts by domain (which
+  would 404 on `localhost` in dev/tests), the short host is domain-scoped and registered
+  first, and the panel answers every other host (panel domain + `localhost`). Tests address
+  the hosts explicitly via `http://{short|panel}_host/…`. No `/etc/hosts` needed for tests.
 - **2026-07-20 (1.3)** — Frontend build (`npm run build`, Vite/Tailwind) is not a CI step
   in Phase 1: no compiled assets are referenced yet (landing/panel use self-contained inline
   styles per the zero-external-requests rule). The Vite build step joins CI when the landing
