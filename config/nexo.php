@@ -111,6 +111,16 @@ return [
         'fail_closed' => (bool) env('NEXO_SAFE_BROWSING_FAIL_CLOSED', false),
     ],
 
+    // Reasons offered on the public report form (ADR-005 §7). Keys are stored;
+    // labels are translation strings shown to the reporter.
+    'report_reasons' => [
+        'malicious' => 'Malicious or scam',
+        'spam' => 'Spam',
+        'abusive' => 'Abusive content',
+        'broken' => 'Broken link',
+        'other' => 'Other',
+    ],
+
     'reserved_slugs' => [
         // System paths / ADR-005 §5 core set.
         'abuse', 'admin', 'api', 'app', 'assets', 'dashboard', 'help', 'login',
