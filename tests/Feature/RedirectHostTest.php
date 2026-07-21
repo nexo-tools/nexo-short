@@ -3,17 +3,6 @@
 use App\Models\Link;
 use App\Models\User;
 
-/** Build a URL on the configured short host. */
-function shortUrl(string $path = '/'): string
-{
-    return 'http://'.config('nexo.short_host').$path;
-}
-
-function panelUrl(string $path = '/'): string
-{
-    return 'http://'.config('nexo.panel_host').$path;
-}
-
 it('AC-1: active link returns 302 to the target with no-store', function () {
     $link = Link::factory()->for(User::factory())->create([
         'slug' => 'active1',

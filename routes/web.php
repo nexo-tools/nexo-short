@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\LinkController;
 use App\Http\Middleware\EnsureRegistrationOpen;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +25,9 @@ Route::middleware('setlocale')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-        // Panel index — placeholder in 1.7; link CRUD lands in 1.8.
-        Route::get('panel', fn () => view('panel.index', ['links' => auth()->user()->links]))->name('panel');
+        // Panel: list / create / deactivate links over the LinkService (ADR-007).
+        Route::get('panel', [LinkController::class, 'index'])->name('panel');
+        Route::post('links', [LinkController::class, 'store'])->name('links.store');
+        Route::patch('links/{link}/deactivate', [LinkController::class, 'deactivate'])->name('links.deactivate');
     });
 });
