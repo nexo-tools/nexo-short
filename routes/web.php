@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 // host lives in routes/short.php. All panel routes negotiate locale (setlocale).
 Route::middleware('setlocale')->group(function () {
     Route::get('/', fn () => view('welcome'))->name('landing');
+    Route::get('privacy', fn () => view('privacy'))->name('privacy');
 
     Route::middleware('guest')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');

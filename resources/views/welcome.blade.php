@@ -32,6 +32,9 @@
         <a href="?lang=es">Español</a>
         <a href="?lang=pt">Português</a>
     </nav>
+    <nav>
+        <a href="{{ route('privacy') }}">{{ __('Privacy') }}</a>
+    </nav>
     <x-attribution />
 </body>
 </html>
