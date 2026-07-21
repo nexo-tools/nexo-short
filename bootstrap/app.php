@@ -44,6 +44,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'setlocale' => SetLocale::class,
         ]);
+
+        // Behind Cloudflare, the real client IP arrives in proxy headers. Without
+        // trusting the proxy, $request->ip() is the edge IP and every per-IP rate
+        // limit (login, creation, report) + the VisitorHash collapse to one bucket.
+        // Set TRUSTED_PROXIES in production (Cloudflare ranges, or '*' when the
+        // origin is reachable ONLY through Cloudflare). Empty in local/dev.
+        if ($proxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(
+                at: $proxies === '*' ? '*' : array_map('trim', explode(',', (string) $proxies)),
+            );
+        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
