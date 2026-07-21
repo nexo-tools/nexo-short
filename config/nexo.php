@@ -59,4 +59,40 @@ return [
 
     'repository_url' => 'https://github.com/nexo-tools/nexo-short',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Slugs (ADR-005 §3/§5, SPEC Phase 1)
+    |--------------------------------------------------------------------------
+    |
+    | Random slugs are base62 within [min, max]. Custom slugs must match
+    | ^[A-Za-z0-9_-]{3,32}$ and may not collide with a reserved word.
+    |
+    */
+
+    'slug' => [
+        'min_length' => (int) env('NEXO_SLUG_MIN_LENGTH', 6),
+        'max_length' => (int) env('NEXO_SLUG_MAX_LENGTH', 7),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reserved slugs (ADR-005 §5)
+    |--------------------------------------------------------------------------
+    |
+    | Slugs that can never be registered because they collide with system paths
+    | or could impersonate the site/ecosystem. Compared case-insensitively.
+    | Adapted from the nexo-links reserved-usernames pattern (CATALOG).
+    |
+    */
+
+    'reserved_slugs' => [
+        // System paths / ADR-005 §5 core set.
+        'abuse', 'admin', 'api', 'app', 'assets', 'dashboard', 'help', 'login',
+        'logout', 'panel', 'privacy', 'register', 'report', 'reports', 'robots',
+        'settings', 'setup', 'status', 'storage', 'support', 'system', 'terms',
+        'up', 'verify', 'www',
+        // Nexo ecosystem tool names.
+        'nexo', 'nexoshort', 'short', 'links', 'agenda', 'events', 'id',
+    ],
+
 ];
