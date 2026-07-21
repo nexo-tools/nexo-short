@@ -63,9 +63,15 @@
 
 ## Phase 3 — Anti-abuse & policies
 
-**Objective:** the full ADR-005 package — the mandatory gate before any public exposure.
+**Objective:** the full ADR-005 package — the mandatory gate before any public exposure. SPEC: [docs/SPEC-phase-3-anti-abuse.md](SPEC-phase-3-anti-abuse.md) (AC-32…AC-40).
 
-Key work: SPEC (including Safe Browsing fail-open/fail-closed decision); Safe Browsing check at creation (env-optional); creation rate limits (user + IP); report page at `/report` (rate-limited, no auth); terms of use + privacy pages; moderation kill-switch flow in panel.
+- [x] 3.1 SPEC: Safe Browsing fail-open/closed decision (default fail-open, configurable — flagged for owner), rate limits, report channel, terms, moderation; ACs AC-32…AC-40. (Scheme whitelist AC-11, reserved slugs AC-10 already shipped in Phase 1.)
+- [ ] 3.2 Creation rate limiting (per user + per IP) on `POST /links` via a named limiter (AC-32/AC-33).
+- [ ] 3.3 Safe Browsing check at creation: env-optional, graceful without key, fail-open/closed configurable (AC-34/AC-35/AC-36).
+- [ ] 3.4 Report channel `/report` on the short host: no-auth, rate-limited, stores a report (AC-37/AC-38).
+- [ ] 3.5 Terms of use page (panel host) (AC-39).
+- [ ] 3.6 Operator moderation kill-switch: `nexo:link-deactivate`/`nexo:link-activate` commands (AC-40).
+- [ ] 3.7 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
 
 **Gate 3 (blocks any public exposure):** deliberate-violation evidence — rate limit actually blocks, Safe Browsing test URL rejected, reserved slugs unregistrable, deactivated link dead immediately; security audit exercised (not theoretical) per standards; owner sign-off.
 
