@@ -1,7 +1,7 @@
 # ADR-008 — Short domain and SEO: nxo.li is noindex; all SEO lives on the landing
 
 - **Date:** 2026-07-20
-- **Status:** Proposed (formal acceptance at Gate 0)
+- **Status:** Accepted (accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 

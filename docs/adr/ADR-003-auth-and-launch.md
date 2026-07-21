@@ -1,7 +1,7 @@
 # ADR-003 — Auth and launch: hosted instance is SSO-only via Nexo ID; public launch waits for it; standalone auth still ships in the code
 
 - **Date:** 2026-07-19 (amended 2026-07-20 — see "Update" below)
-- **Status:** Proposed (core decision taken by Alvaro during Phase 0 planning, 2026-07-19; formal acceptance at Gate 0)
+- **Status:** Accepted (core decision taken by Alvaro during Phase 0 planning, 2026-07-19; accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 

@@ -6,7 +6,7 @@
 >
 > **External dependency** (re-anchored 2026-07-20, ADR-003 Update): nexo-id's provider is already **live in production** (its Phases 1–2 closed; contract in its `docs/INTEGRATION.md`). What still gates the public launch is **nexo-id T4: verified backups + uptime monitoring** (deferred there to a cross-tool ops pass) — hard condition on Gate 5. The reusable OIDC client pattern is built in nexo-id Phase 3 *with this project as first consumer*, coordinated with Alvaro. Development here does not wait — Phases 1–3 build on standalone auth.
 
-## Phase 0 — Planning & foundations (current)
+## Phase 0 — Planning & foundations
 
 **Objective:** decisions made and recorded, scope fixed, project formalized. Zero product code.
 
@@ -18,19 +18,19 @@
 - [x] 0.6 Project formalization: `AGENTS.md` (EN), `CLAUDE.md` → AGENTS, `CLAUDE.local.md` (gitignored) with standards briefing, `README.md` with Status line, `.gitignore`, MIT `LICENSE`, git init, private GitHub repo (final destination: `nexo-tools` org).
 - [x] 0.7 Re-validation against the updated planning prompt (2026-07-20): ADR-003 amended (nexo-id provider live; launch condition re-anchored to its T4), ADR-005 gains the target-scheme whitelist, ADR-008 added (short domain noindex), task 1.2 switched to the shared `dev-environment` standard, AGENTS.md updated.
 - [ ] 0.8 Ops (Alvaro, Cloudflare panel — pending from the brief's post-purchase checklist): temporary redirect rule `nxo.li/*` → `alvarocdev.com` so the domain is useful from day 1.
-- [ ] 0.9 Present plan + ADRs to Alvaro; resolve open points; stamp sign-off.
+- [x] 0.9 Presented plan + ADRs to Alvaro; open points resolved; Gate 0 signed off (2026-07-21).
 
-**Gate 0 (owner sign-off required):**
-- [ ] ADRs 001–008 reviewed and accepted (or amended here, dated).
-- [ ] SCOPE MVP in/out approved.
-- [ ] Open points confirmed: Safe Browsing fail-open vs fail-closed default (ADR-005, can also be settled in the Phase 1/3 SPEC); whether redirect latency gets an early measurement spike in Phase 1 or waits for the Phase 4 production measurement (ADR-002).
-- [ ] Sign-off: pending.
+**Gate 0 — signed off (Alvaro, 2026-07-21):**
+- [x] ADRs 001–008 reviewed and **Accepted** (status stamped in each ADR).
+- [x] SCOPE MVP in/out approved.
+- [x] Open points confirmed: **Safe Browsing default = fail-open**, configurable via `NEXO_SAFE_BROWSING_FAIL_CLOSED` (a positive match always rejects; only API errors follow the flag); **redirect-latency measurement deferred to Phase 4 production** (ADR-002) — no early spike.
+- [x] Sign-off: **Alvaro, 2026-07-21.**
 
 ## Phase 1 — Core shortener (standalone)
 
 **Objective:** working shortener with panel on local auth — redirect, slugs, CRUD, kill-switch — SPEC-first, sibling conventions installed from the start. No public exposure.
 
-> **Execution note (2026-07-20):** Alvaro authorized autonomous execution of Phases 1–3 (the code phases) in a single session, with commit+push per task, and asked for open decisions to be defaulted-with-a-flag and reported together at the end rather than paused on. Gate 0's formal sign-off box stays unchecked (owner-only); the open Gate 0 points are carried as defaults noted in the relevant SPEC and surfaced for review. Phases 4–5 are not executed here (production infra + external nexo-id coordination).
+> **Execution note (2026-07-20, updated 2026-07-21):** Alvaro authorized autonomous execution of Phases 1–3 (the code phases) in a single session, commit+push per task. Open decisions were defaulted-with-a-flag and reviewed together at the end; on **2026-07-21 Alvaro accepted ADRs 001–008 and signed off Gates 0–3** (Safe Browsing default = fail-open confirmed; redirect-latency deferred to Phase 4). Phases 4–5 are not executed here (production infra + external nexo-id coordination).
 
 - [x] 1.1 `SPEC.md` for the core → [docs/SPEC-phase-1-core.md](SPEC-phase-1-core.md): env contract (short/panel domain, auth mode, attribution), data model, redirect flow, slug rules, auth modes, service-layer boundary (ADR-007), numbered ACs (AC-1…AC-20) mapped to tests.
 - [x] 1.2 Scaffold: Laravel 13.8 via `laravel-bootstrap-docker-only` (Sail 8.5, no local PHP) on the shared **`dev-environment`** standard: database `nexo_short` created in the shared MySQL (3306, `dev`/`dev`), `compose.yaml` ships only the app runtime (reaches MySQL via `host.docker.internal`), `APP_PORT=8102`/`VITE_PORT=5177`/`WWWUSER`/`WWWGROUP` pinned in `.env`, tests on SQLite `:memory:`; Pest/Pint/Larastan green; CI `.github/workflows/ci.yml` (audit + Pint + Larastan + Pest). E2E verified: Sail app container migrates against shared MySQL.
@@ -44,7 +44,7 @@
 
 **Gate 1:** all ACs green with name-traced tests (`grep` pass); deliberate violations caught (reserved slug rejected, 301 guard trips, deactivated link 404s on next request); CSP sync test green; CI green; ARCHITECTURE matches reality; owner sign-off.
 
-**Gate 1 status (2026-07-20):** technical criteria met — 20/20 ACs name-traced (grep pass), deliberate-violation tests green (reserved slug rejected AC-10, anti-301 guard AC-5, kill-switch 404 AC-4/AC-16), CSP sync green (AC-18), local CI-equivalent green (audit + Pint + Larastan + translations `--check` + Pest, 53 tests), ARCHITECTURE matches reality. **Owner sign-off: pending** (Alvaro). Open Gate 0/1 points still needing an owner call are listed for review (Safe Browsing fail-open/closed → decided in Phase 3 SPEC; redirect-latency spike → deferred to Phase 4, ADR-002).
+**Gate 1 status (2026-07-20):** technical criteria met — 20/20 ACs name-traced (grep pass), deliberate-violation tests green (reserved slug rejected AC-10, anti-301 guard AC-5, kill-switch 404 AC-4/AC-16), CSP sync green (AC-18), local CI-equivalent green (audit + Pint + Larastan + translations `--check` + Pest, 53 tests), ARCHITECTURE matches reality. **Owner sign-off: Alvaro, 2026-07-21.** Gate 0 open points resolved (Safe Browsing fail-open confirmed; redirect-latency deferred to Phase 4).
 
 ## Phase 2 — Click metrics
 
@@ -59,7 +59,7 @@
 
 **Gate 2:** ACs traced; redirect latency not measurably degraded by logging (compare against Gate 1 baseline — production measurement, Phase 4/ADR-002); no raw IP/UA at rest verified by test; owner sign-off.
 
-**Gate 2 status (2026-07-20):** technical criteria met — AC-21…AC-31 name-traced (grep pass), no-raw-IP/UA verified by schema test (AC-22), redirect semantics unchanged with logging (AC-27), full CI-equivalent green (74 tests). Redirect-latency-not-degraded is a production measurement (Phase 4/ADR-002), not a unit test — noted. **Owner sign-off: pending** (Alvaro).
+**Gate 2 status (2026-07-20):** technical criteria met — AC-21…AC-31 name-traced (grep pass), no-raw-IP/UA verified by schema test (AC-22), redirect semantics unchanged with logging (AC-27), full CI-equivalent green (74 tests). Redirect-latency-not-degraded is a production measurement (Phase 4/ADR-002), not a unit test — noted. **Owner sign-off: Alvaro, 2026-07-21.**
 
 ## Phase 3 — Anti-abuse & policies
 
@@ -75,7 +75,7 @@
 
 **Gate 3 (blocks any public exposure):** deliberate-violation evidence — rate limit actually blocks, Safe Browsing test URL rejected, reserved slugs unregistrable, deactivated link dead immediately; security audit exercised (not theoretical) per standards; owner sign-off.
 
-**Gate 3 status (2026-07-20):** technical criteria met — deliberate-violation tests green: creation rate limit blocks (AC-32/AC-33, 429), report rate limit blocks (AC-38), Safe Browsing test URL rejected (AC-34), reserved slug unregistrable (AC-10), `javascript:`/`data:` target rejected (AC-11), link dead immediately on deactivate (AC-4/AC-16/AC-40). AC-32…AC-40 name-traced (grep). Full CI-equivalent green (90 tests). **Still required before public exposure (owner):** a real (not theoretical) security review per standards, and owner sign-off. **Safe Browsing failure-mode default = fail-open (configurable) — needs owner confirmation.**
+**Gate 3 status (2026-07-20, signed off 2026-07-21):** technical criteria met — deliberate-violation tests green: creation rate limit blocks (AC-32/AC-33, 429), report rate limit blocks (AC-38), Safe Browsing test URL rejected (AC-34), reserved slug unregistrable (AC-10), `javascript:`/`data:` target rejected (AC-11), link dead immediately on deactivate (AC-4/AC-16/AC-40). AC-32…AC-40 name-traced (grep). Full CI-equivalent green (90 tests). **Security review done (2026-07-21):** one finding fixed — trusted proxies via `TRUSTED_PROXIES` so per-IP controls don't collapse behind Cloudflare (commit `sec:`); other surfaces clean (no mass-assignment, no raw SQL on user input, owner-only authz, strict CSP). Safe Browsing default = **fail-open** confirmed by Alvaro. **Owner sign-off: Alvaro, 2026-07-21.** (Public *exposure* still gates on Phase 4 deploy + Phase 5 / nexo-id — this sign-off clears the anti-abuse phase itself.)
 
 ## Phase 4 — Production deploy (dark) + ops baseline
 

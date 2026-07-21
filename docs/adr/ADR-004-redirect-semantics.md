@@ -1,7 +1,7 @@
 # ADR-004 — Redirect semantics: 302 + no-store, never 301; origin sees every click
 
 - **Date:** 2026-07-19
-- **Status:** Proposed (hard requirement fixed in the brief; formal acceptance at Gate 0)
+- **Status:** Accepted (hard requirement fixed in the brief; accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 

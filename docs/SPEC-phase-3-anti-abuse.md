@@ -19,13 +19,13 @@ Governing ADR: 005. Also 003 (account gate), 008 (short host noindex — `/repor
 ## Open decision resolved here — Safe Browsing failure mode
 
 ADR-005 §Consequences left "fail-open vs fail-closed on API timeout/error" to the SPEC with
-Alvaro. **Default chosen (pending owner confirmation): fail-OPEN, configurable.** On a Safe
+Alvaro. **Default: fail-OPEN, configurable — confirmed by Alvaro 2026-07-21.** On a Safe
 Browsing API error/timeout the link is **created** (the request is not blocked on Google's
 uptime), because the account gate + creation rate limits + scheme whitelist + reserved slugs
 already stand between an attacker and abuse, and blocking legitimate users on a third-party
 outage is the worse failure for a self-hostable tool. Instances that prefer the stricter
 posture set `NEXO_SAFE_BROWSING_FAIL_CLOSED=true` to reject on API error. A *positive* match
-(URL is flagged) always rejects, regardless of this flag. **Flagged for owner review.**
+(URL is flagged) always rejects, regardless of this flag. 
 
 ## Env contract (additions)
 

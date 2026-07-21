@@ -1,7 +1,7 @@
 # ADR-006 — Click analytics: server-side on the redirect, cookieless, no raw IPs; VisitorHash for uniques
 
 - **Date:** 2026-07-19
-- **Status:** Proposed (privacy constraints fixed in the brief; formal acceptance at Gate 0)
+- **Status:** Accepted (privacy constraints fixed in the brief; accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 

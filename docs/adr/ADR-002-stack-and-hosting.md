@@ -1,7 +1,7 @@
 # ADR-002 — Stack and hosting: Laravel + MySQL on the existing Hostinger shared hosting, Cloudflare in front of the short domain
 
 - **Date:** 2026-07-19
-- **Status:** Proposed (core decision taken by Alvaro during Phase 0 planning, 2026-07-19; formal acceptance at Gate 0)
+- **Status:** Accepted (core decision taken by Alvaro during Phase 0 planning, 2026-07-19; accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 

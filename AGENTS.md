@@ -5,7 +5,7 @@
 
 ## What this project is
 
-Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phases 1–3 implemented — core shortener + click metrics + the ADR-005 anti-abuse package (creation rate limits per user/IP, env-optional Safe Browsing, public `/report`, terms, operator moderation commands). 40 ACs green (AC-1…AC-40); Gates 1–3 awaiting owner sign-off. Next is Phase 4 (production deploy) — owner infra, not autonomous.** Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phases 1–3 implemented — core shortener + click metrics + the ADR-005 anti-abuse package (creation rate limits per user/IP, env-optional Safe Browsing, public `/report`, terms, operator moderation commands). 40 ACs green (AC-1…AC-40); ADRs 001–008 Accepted and Gates 0–3 signed off (Alvaro, 2026-07-21); security review done (trusted-proxies fix). Next is Phase 4 (production deploy) — owner infra, not autonomous.** Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Stack
 

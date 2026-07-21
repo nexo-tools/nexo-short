@@ -1,7 +1,7 @@
 # ADR-005 — Anti-abuse: the launch-gating package (account gate, Safe Browsing, rate limits, reserved slugs, kill-switch, reporting)
 
 - **Date:** 2026-07-19
-- **Status:** Proposed (requirement level fixed in the brief; formal acceptance at Gate 0)
+- **Status:** Accepted (requirement level fixed in the brief; accepted at Gate 0 — 2026-07-21, Alvaro)
 
 ## Context
 
