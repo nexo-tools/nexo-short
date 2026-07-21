@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +14,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // SecurityHeaders on every web response (both hosts). SetLocale needs a
+        // session, so it is aliased and applied to panel routes only — the short
+        // host serves cookieless redirects (see routes/web.php).
+        $middleware->web(append: [
+            SecurityHeaders::class,
+        ]);
+
+        $middleware->alias([
+            'setlocale' => SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

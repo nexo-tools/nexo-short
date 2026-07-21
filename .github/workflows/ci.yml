@@ -33,6 +33,13 @@ jobs:
       - name: Larastan (static analysis)
         run: vendor/bin/phpstan analyse --no-progress
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Translations (check in sync)
+        run: node scripts/generate-translations.mjs --check
+
       - name: Pest (tests)
         run: |
           cp .env.example .env

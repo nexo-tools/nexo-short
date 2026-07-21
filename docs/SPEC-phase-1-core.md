@@ -170,4 +170,12 @@ reality; owner sign-off.
 ## Reconciliation
 
 <!-- Dated notes when implementation diverges from this SPEC. -->
-- _(none yet)_
+- **2026-07-20 (1.3)** — Brand-assets generator (`scripts/generate-brand-assets.mjs`) and
+  master `resources/brand/mark.svg` are installed, but the binary outputs
+  (favicons/OG/PWA) are **not generated/committed in Phase 1**: they are public-surface
+  assets consumed by the landing (Phase 5), and Phase 1 is dark. Run `npm run brand` to
+  produce them. `sharp`/`png-to-ico` are `optionalDependencies` so CI stays lean.
+- **2026-07-20 (1.3)** — Frontend build (`npm run build`, Vite/Tailwind) is not a CI step
+  in Phase 1: no compiled assets are referenced yet (landing/panel use self-contained inline
+  styles per the zero-external-requests rule). The Vite build step joins CI when the landing
+  compiles assets (Phase 5).
