@@ -48,11 +48,16 @@
 
 ## Phase 2 — Click metrics
 
-**Objective:** ADR-006 live: server-side click logging on the redirect and per-link stats in the panel.
+**Objective:** ADR-006 live: server-side click logging on the redirect and per-link stats in the panel. SPEC: [docs/SPEC-phase-2-metrics.md](SPEC-phase-2-metrics.md) (AC-21…AC-31).
 
-Key work: SPEC; `clicks` migration (`link_id, clicked_at` index); logging inside the redirect flow (referrer, device class, `CF-IPCountry`, VisitorHash adapted from nexo-links); panel stats (totals, per-day chart with locally-bundled assets, breakdowns); bot flagging; privacy-page content for what's stored.
+- [x] 2.1 SPEC: clicks data model, logging flow, VisitorHash, device/country/referrer parsing, stats, privacy note; ACs AC-21…AC-31.
+- [ ] 2.2 `clicks` migration (`link_id, created_at` + `link_id, visitor_hash` indexes) + `Click` model + factory; schema test (no raw IP/UA column, AC-22).
+- [ ] 2.3 VisitorHash (adapt nexolinks) + `DeviceClassifier` + referrer/country parsing; log inside the redirect flow (AC-21/AC-23/AC-24/AC-25/AC-26/AC-27).
+- [ ] 2.4 Panel per-link stats over a `ClickStats` service: totals, unique visitors, per-day inline-SVG chart (local assets), breakdowns, bot filter (AC-28/AC-29/AC-30).
+- [ ] 2.5 Privacy page (panel host) documenting what is stored per click (AC-31).
+- [ ] 2.6 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
 
-**Gate 2:** ACs traced; redirect latency not measurably degraded by logging (compare against Gate 1 baseline); no raw IP/UA at rest verified by test; owner sign-off.
+**Gate 2:** ACs traced; redirect latency not measurably degraded by logging (compare against Gate 1 baseline — production measurement, Phase 4/ADR-002); no raw IP/UA at rest verified by test; owner sign-off.
 
 ## Phase 3 — Anti-abuse & policies
 
