@@ -52,7 +52,7 @@
 
 - [x] 2.1 SPEC: clicks data model, logging flow, VisitorHash, device/country/referrer parsing, stats, privacy note; ACs AC-21…AC-31.
 - [x] 2.2 `clicks` migration (`link_id, created_at` + `link_id, visitor_hash` indexes) + `Click` model + factory; schema test (no raw IP/UA column, AC-22).
-- [ ] 2.3 VisitorHash (adapt nexolinks) + `DeviceClassifier` + referrer/country parsing; log inside the redirect flow (AC-21/AC-23/AC-24/AC-25/AC-26/AC-27).
+- [x] 2.3 VisitorHash (adapt nexolinks) + `DeviceClassifier` + referrer/country parsing; log inside the redirect flow (AC-21/AC-23/AC-24/AC-25/AC-26/AC-27).
 - [ ] 2.4 Panel per-link stats over a `ClickStats` service: totals, unique visitors, per-day inline-SVG chart (local assets), breakdowns, bot filter (AC-28/AC-29/AC-30).
 - [ ] 2.5 Privacy page (panel host) documenting what is stored per click (AC-31).
 - [ ] 2.6 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
