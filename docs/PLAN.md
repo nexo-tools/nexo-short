@@ -70,7 +70,7 @@
 - [x] 3.3 Safe Browsing check at creation: env-optional, graceful without key, fail-open/closed configurable (AC-34/AC-35/AC-36).
 - [x] 3.4 Report channel `/report` on the short host: no-auth, rate-limited, stores a report (AC-37/AC-38).
 - [x] 3.5 Terms of use page (panel host) (AC-39).
-- [ ] 3.6 Operator moderation kill-switch: `nexo:link-deactivate`/`nexo:link-activate` commands (AC-40).
+- [x] 3.6 Operator moderation kill-switch: `nexo:link-deactivate`/`nexo:link-activate` commands (AC-40).
 - [ ] 3.7 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
 
 **Gate 3 (blocks any public exposure):** deliberate-violation evidence — rate limit actually blocks, Safe Browsing test URL rejected, reserved slugs unregistrable, deactivated link dead immediately; security audit exercised (not theoretical) per standards; owner sign-off.
