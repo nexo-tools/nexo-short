@@ -30,7 +30,9 @@
 
 **Objective:** working shortener with panel on local auth — redirect, slugs, CRUD, kill-switch — SPEC-first, sibling conventions installed from the start. No public exposure.
 
-- [ ] 1.1 `SPEC.md` for the core: env contract (short/panel domain, auth mode, attribution), data model, redirect flow, slug rules, auth modes, service-layer boundary (ADR-007), numbered ACs mapped to tests.
+> **Execution note (2026-07-20):** Alvaro authorized autonomous execution of Phases 1–3 (the code phases) in a single session, with commit+push per task, and asked for open decisions to be defaulted-with-a-flag and reported together at the end rather than paused on. Gate 0's formal sign-off box stays unchecked (owner-only); the open Gate 0 points are carried as defaults noted in the relevant SPEC and surfaced for review. Phases 4–5 are not executed here (production infra + external nexo-id coordination).
+
+- [x] 1.1 `SPEC.md` for the core → [docs/SPEC-phase-1-core.md](SPEC-phase-1-core.md): env contract (short/panel domain, auth mode, attribution), data model, redirect flow, slug rules, auth modes, service-layer boundary (ADR-007), numbered ACs (AC-1…AC-20) mapped to tests.
 - [ ] 1.2 Scaffold: Laravel latest via `laravel-bootstrap-docker-only` (Sail, no local PHP) on the shared **`dev-environment`** standard (already installed at `~/dev-environment` — do NOT reinstall): create database `nexo_short` in the shared MySQL (standard port 3306, `dev`/`dev`), app compose ships ONLY the app runtime (no DB/mail services), pin `APP_PORT`/`VITE_PORT`/`WWWUSER`/`WWWGROUP` in `.env`, tests on SQLite `:memory:`; Pest/Pint/Larastan; CI per nexo-agenda reference (lint + static analysis + tests + `composer audit`).
 - [ ] 1.3 Canonical ecosystem pieces (CATALOG sources noted in AGENTS.md): i18n generator en/es/pt + guardian test, SecurityHeaders/CSP + `.htaccess` sync test, brand assets generator, `NEXO_ATTRIBUTION_*` footer.
 - [ ] 1.4 Migrations: `links` (unique slug index, `is_active`, user FK), users/sessions per Laravel + auth-mode groundwork.
