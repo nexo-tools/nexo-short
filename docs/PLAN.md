@@ -40,9 +40,11 @@
 - [x] 1.6 Redirect host: `then:`-registered host-scoped routes (short host cookieless), `RedirectController` 302 + `no-store` (AC-1), `ShortHostHeaders` X-Robots-Tag noindex + no-store (AC-2), branded `errors/404` with panel + report links (AC-3), kill-switch 404s next request (AC-4), anti-301 guard grep (AC-5), `RobotsController` Disallow all + panel NOT noindex (AC-6). 38 tests green.
 - [x] 1.7 Standalone local auth: LoginRequest (per-email+IP rate limit, AC-13), AuthenticatedSessionController + RegisteredUserController, `EnsureRegistrationOpen` env gate (AC-14), secure http-only sessions, self-contained auth views + `<x-layout>`. Password reset/email-verification deferred (SPEC note). Adapted from Breeze/nexo-links (CATALOG). 45 tests green.
 - [x] 1.8 Panel: `LinkService` boundary (create/forUser/deactivate, AC-17), `LinkController` + `StoreLinkRequest`, auth-gated create (AC-12/AC-15), reserved-slug rejection, own-links listing + owner-only deactivate → 404 on short host (AC-16); i18n'd panel UI + attribution footer. 53 tests green.
-- [ ] 1.9 Phase reconciliation: SPEC ↔ implementation, `docs/ARCHITECTURE.md` first version, AGENTS.md updated.
+- [x] 1.9 Phase reconciliation: SPEC ↔ implementation reconciled (dated notes in the SPEC), `docs/ARCHITECTURE.md` first version, AGENTS.md updated (state, run instructions, CATALOG origins). AC↔test grep verified (all 20 ACs cited).
 
 **Gate 1:** all ACs green with name-traced tests (`grep` pass); deliberate violations caught (reserved slug rejected, 301 guard trips, deactivated link 404s on next request); CSP sync test green; CI green; ARCHITECTURE matches reality; owner sign-off.
+
+**Gate 1 status (2026-07-20):** technical criteria met — 20/20 ACs name-traced (grep pass), deliberate-violation tests green (reserved slug rejected AC-10, anti-301 guard AC-5, kill-switch 404 AC-4/AC-16), CSP sync green (AC-18), local CI-equivalent green (audit + Pint + Larastan + translations `--check` + Pest, 53 tests), ARCHITECTURE matches reality. **Owner sign-off: pending** (Alvaro). Open Gate 0/1 points still needing an owner call are listed for review (Safe Browsing fail-open/closed → decided in Phase 3 SPEC; redirect-latency spike → deferred to Phase 4, ADR-002).
 
 ## Phase 2 — Click metrics
 

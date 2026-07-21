@@ -5,7 +5,7 @@
 
 ## What this project is
 
-Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phase 0 (planning) — no product code yet.** Start at [docs/PLAN.md](docs/PLAN.md).
+Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phase 1 (core shortener) implemented — redirect host, slug engine, standalone auth, panel over a service layer; all 20 ACs green, awaiting Gate 1 owner sign-off.** Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Stack
 
@@ -13,7 +13,15 @@ Decided in ADR-002 (pending Gate 0 acceptance): Laravel (latest) + MySQL on Host
 
 ## How to run it
 
-Nothing to run yet — Phase 1 scaffolds the app.
+Docker only (no local PHP). The shared `dev-environment` must be up (`cd ~/dev-environment && docker compose up -d mysql`); database `nexo_short` already created there.
+
+- **First time:** `docker compose build` (Sail 8.5 image).
+- **Migrate:** `docker compose run --rm laravel.test php artisan migrate`
+- **Serve:** `docker compose up -d` → app on `http://localhost:8102`. For the two hosts, add to `/etc/hosts`: `127.0.0.1 nxo.test nexoshort.test` and browse `http://nxo.test:8102` (redirects) / `http://nexoshort.test:8102` (panel).
+- **Checks (CI equivalent):** run via the composer image —
+  `docker run --rm -v "$PWD":/app -w /app composer:latest bash -c 'vendor/bin/pint --test && vendor/bin/phpstan analyse && vendor/bin/pest'`
+  and translations `docker run --rm -v "$PWD":/app -w /app node:22 node scripts/generate-translations.mjs --check`.
+- Tests use SQLite `:memory:` (no MySQL needed). `pdo_mysql` is absent from the `composer` image, so run artisan/migrate through Sail (`docker compose run --rm laravel.test …`), not the composer image.
 
 ## Production
 
@@ -35,6 +43,7 @@ Not deployed. Planned (Phase 4): Hostinger shared via the `deploy-laravel-hostin
 
 ## Accumulated context
 
+- **2026-07-20** — **Phase 1 implemented** (tasks 1.1–1.8, one commit each `"1,N …"`, CI green per task). Stack live: Laravel 13.8 + Sail 8.5 on shared `dev-environment` MySQL, Pest/Pint/Larastan (level 6), CI (audit + Pint + Larastan + translations `--check` + Pest). 53 tests, all 20 SPEC ACs name-traced. **CATALOG pieces adapted (origins):** `SecurityHeaders` + `.htaccess` CSP sync ← nexo-id/nexo-agenda; `generate-translations.mjs` + guardian ← nexo-id; `LinkTargetUrl` ← nexolinks `app/Rules/LinkUrl.php` (narrowed to http/https per ADR-005 §3); `ReservedSlug` ← nexolinks `app/Rules/Username.php` + `config/nexo.php`; `LoginRequest`/auth ← Laravel Breeze via nexolinks; `generate-brand-assets.mjs` ← nexolinks (binaries deferred to Phase 5). Deviations logged in [docs/SPEC-phase-1-core.md](docs/SPEC-phase-1-core.md) § Reconciliation (brand binaries + Vite build deferred; password reset deferred; `/report` link inert until Phase 3). Awaiting Gate 1 owner sign-off.
 - **2026-07-19** — Coordination note from **Nexo Events** (Phase 0 planned, `/Users/alvarocarrizales/nexoevents`, its ADR-006): post-MVP it wants an auto short link per event, which requires **programmatic link creation by a trusted client** (HTTP API, env-configured — no DB coupling). Nexo Short's MVP has no public API (its ADRs) — this is a candidate for a later phase; non-blocking for both sides.
 - **2026-07-20** — nexo-id state updated (its Phases 1–2 closed, audited): the OIDC provider is **live** at nexoid.alvarocdev.com; integration contract = nexo-id `docs/INTEGRATION.md`. Launch condition re-anchored (ADR-003 Update): no real users until **nexo-id T4 (verified backups + uptime)** is done. The reusable OIDC client pattern does not exist yet — nexo-id Phase 3 builds it with this project as first consumer, coordinated with Alvaro (never implement in that repo unilaterally).
 - **2026-07-20** — ADR-008 added (short domain noindex); ADR-005 gained the target-scheme whitelist. CATALOG now lists both nexo-links source patterns (reserved names: `app/Rules/Username.php` + `config/nexo.php`; scheme whitelist: `app/Rules/LinkUrl.php`).

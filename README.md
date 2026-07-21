@@ -2,4 +2,4 @@
 
 Short links on your own domain — the open source URL shortener of the Nexo ecosystem. Cookieless click metrics, privacy by design (no raw IPs), self-hostable.
 
-Status: Phase 1 (core shortener) in progress — Laravel scaffolded (Sail on the shared dev-environment, Pest/Pint/Larastan, CI); building redirect, slugs, CRUD and standalone auth per [docs/SPEC-phase-1-core.md](docs/SPEC-phase-1-core.md).
+Status: Phase 1 (core shortener) implemented — redirect host (302 + no-store, noindex), slug engine, standalone auth and a link panel over a service layer; 20/20 ACs green, awaiting Gate 1 sign-off. See [docs/PLAN.md](docs/PLAN.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
