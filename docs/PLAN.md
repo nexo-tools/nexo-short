@@ -66,7 +66,7 @@
 **Objective:** the full ADR-005 package — the mandatory gate before any public exposure. SPEC: [docs/SPEC-phase-3-anti-abuse.md](SPEC-phase-3-anti-abuse.md) (AC-32…AC-40).
 
 - [x] 3.1 SPEC: Safe Browsing fail-open/closed decision (default fail-open, configurable — flagged for owner), rate limits, report channel, terms, moderation; ACs AC-32…AC-40. (Scheme whitelist AC-11, reserved slugs AC-10 already shipped in Phase 1.)
-- [ ] 3.2 Creation rate limiting (per user + per IP) on `POST /links` via a named limiter (AC-32/AC-33).
+- [x] 3.2 Creation rate limiting (per user + per IP) on `POST /links` via a named limiter (AC-32/AC-33).
 - [ ] 3.3 Safe Browsing check at creation: env-optional, graceful without key, fail-open/closed configurable (AC-34/AC-35/AC-36).
 - [ ] 3.4 Report channel `/report` on the short host: no-auth, rate-limited, stores a report (AC-37/AC-38).
 - [ ] 3.5 Terms of use page (panel host) (AC-39).

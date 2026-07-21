@@ -85,6 +85,32 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Anti-abuse (ADR-005)
+    |--------------------------------------------------------------------------
+    |
+    | Creation and report rate limits, and the optional Google Safe Browsing
+    | check at creation. Safe Browsing is disabled when no key is set (self-host
+    | default); a flagged URL is always rejected, and on API error the behavior
+    | follows `fail_closed` (default fail-open — SPEC Phase 3).
+    |
+    */
+
+    'create_rate' => [
+        'per_user' => (int) env('NEXO_CREATE_RATE_PER_USER', 10),
+        'per_ip' => (int) env('NEXO_CREATE_RATE_PER_IP', 20),
+    ],
+
+    'report_rate' => [
+        'per_ip' => (int) env('NEXO_REPORT_RATE_PER_IP', 5),
+    ],
+
+    'safe_browsing' => [
+        'key' => env('NEXO_SAFE_BROWSING_KEY', ''),
+        'fail_closed' => (bool) env('NEXO_SAFE_BROWSING_FAIL_CLOSED', false),
+    ],
+
     'reserved_slugs' => [
         // System paths / ADR-005 §5 core set.
         'abuse', 'admin', 'api', 'app', 'assets', 'dashboard', 'help', 'login',

@@ -28,7 +28,7 @@ Route::middleware('setlocale')->group(function () {
 
         // Panel: list / create / deactivate links over the LinkService (ADR-007).
         Route::get('panel', [LinkController::class, 'index'])->name('panel');
-        Route::post('links', [LinkController::class, 'store'])->name('links.store');
+        Route::post('links', [LinkController::class, 'store'])->middleware('throttle:link-creation')->name('links.store');
         Route::patch('links/{link}/deactivate', [LinkController::class, 'deactivate'])->name('links.deactivate');
         Route::get('links/{link}/stats', [LinkController::class, 'stats'])->name('links.stats');
     });
