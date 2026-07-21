@@ -34,6 +34,7 @@
     </nav>
     <nav>
         <a href="{{ route('privacy') }}">{{ __('Privacy') }}</a>
+        <a href="{{ route('terms') }}">{{ __('Terms') }}</a>
     </nav>
     <x-attribution />
 </body>

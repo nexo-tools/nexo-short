@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('setlocale')->group(function () {
     Route::get('/', fn () => view('welcome'))->name('landing');
     Route::get('privacy', fn () => view('privacy'))->name('privacy');
+    Route::get('terms', fn () => view('terms'))->name('terms');
 
     Route::middleware('guest')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
