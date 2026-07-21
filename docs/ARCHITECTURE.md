@@ -30,12 +30,18 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 | panel | `GET/POST /register` | [RegisteredUserController](../app/Http/Controllers/Auth/RegisteredUserController.php), gated by `EnsureRegistrationOpen` |
 | panel | `GET /panel` | [LinkController@index](../app/Http/Controllers/LinkController.php) |
 | panel | `POST /links`, `PATCH /links/{link}/deactivate` | LinkController@store / @deactivate |
+| panel | `GET /links/{link}/stats` | LinkController@stats (owner-only) |
+| panel | `GET /privacy` | privacy page (ADR-006 disclosure) |
 
 ## Layers
 
 - **Service layer** ([LinkService](../app/Services/LinkService.php)) — create / forUser /
   deactivate. No HTTP concerns (ADR-007). Panel controllers call it; a future API controller
-  will call the same methods.
+  will call the same methods. [ClickStats](../app/Services/ClickStats.php) — aggregate read
+  model (totals, uniques, per-day, breakdowns, bot filter).
+- **Click logging** ([ClickRecorder](../app/Support/ClickRecorder.php)) — records one click on
+  the redirect hot path via [VisitorHash](../app/Support/VisitorHash.php) (daily-rotating) and
+  [DeviceClassifier](../app/Support/DeviceClassifier.php). No raw IP/UA at rest (ADR-006).
 - **Slug engine** ([SlugGenerator](../app/Support/SlugGenerator.php)) — unique base62,
   collision retry + widening.
 - **Validation rules** — [ReservedSlug](../app/Rules/ReservedSlug.php) (format + reserved
@@ -46,7 +52,9 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 ## Data
 
 `users` (Laravel default) · `links` (`user_id` FK cascade, unique `slug`, `target_url`,
-`is_active` indexed). See [SPEC-phase-1-core.md](SPEC-phase-1-core.md).
+`is_active` indexed) · `clicks` (`link_id` FK cascade, `visitor_hash`, `referrer_host`,
+`device`, `country`, `created_at`; no raw IP/UA — ADR-006). See
+[SPEC-phase-1-core.md](SPEC-phase-1-core.md) and [SPEC-phase-2-metrics.md](SPEC-phase-2-metrics.md).
 
 ## Conventions
 
@@ -65,5 +73,6 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 
 ## Not here yet
 
-Click metrics (Phase 2) · anti-abuse package + `/report` + terms/privacy (Phase 3) ·
-production deploy (Phase 4) · Nexo ID SSO (Phase 5) · public API (backlog, ADR-007).
+Anti-abuse package (Safe Browsing, creation rate limits) + `/report` + terms of use
+(Phase 3) · production deploy (Phase 4) · Nexo ID SSO (Phase 5) · public API (backlog,
+ADR-007).

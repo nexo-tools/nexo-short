@@ -55,9 +55,11 @@
 - [x] 2.3 VisitorHash (adapt nexolinks) + `DeviceClassifier` + referrer/country parsing; log inside the redirect flow (AC-21/AC-23/AC-24/AC-25/AC-26/AC-27).
 - [x] 2.4 Panel per-link stats over a `ClickStats` service: totals, unique visitors, per-day inline-SVG chart (local assets), breakdowns, bot filter (AC-28/AC-29/AC-30).
 - [x] 2.5 Privacy page (panel host) documenting what is stored per click (AC-31).
-- [ ] 2.6 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
+- [x] 2.6 Reconciliation: SPEC ↔ impl (no divergence), ARCHITECTURE + AGENTS updated, AC-21…AC-31 grep-verified.
 
 **Gate 2:** ACs traced; redirect latency not measurably degraded by logging (compare against Gate 1 baseline — production measurement, Phase 4/ADR-002); no raw IP/UA at rest verified by test; owner sign-off.
+
+**Gate 2 status (2026-07-20):** technical criteria met — AC-21…AC-31 name-traced (grep pass), no-raw-IP/UA verified by schema test (AC-22), redirect semantics unchanged with logging (AC-27), full CI-equivalent green (74 tests). Redirect-latency-not-degraded is a production measurement (Phase 4/ADR-002), not a unit test — noted. **Owner sign-off: pending** (Alvaro).
 
 ## Phase 3 — Anti-abuse & policies
 
