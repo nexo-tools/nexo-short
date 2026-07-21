@@ -175,6 +175,12 @@ reality; owner sign-off.
   (favicons/OG/PWA) are **not generated/committed in Phase 1**: they are public-surface
   assets consumed by the landing (Phase 5), and Phase 1 is dark. Run `npm run brand` to
   produce them. `sharp`/`png-to-ico` are `optionalDependencies` so CI stays lean.
+- **2026-07-20 (1.7)** — Password reset / email verification are **not** in Phase 1: the
+  hosted instance launches SSO-only (Nexo ID owns credentials/verification, ADR-003), and
+  the standalone flow is dark until then. Self-host password reset is a later hardening task
+  (needs SMTP); registration + login + rate-limited auth + secure sessions ship now.
+- **2026-07-20 (1.7)** — Login/register redirect to `route('panel')`, a placeholder panel in
+  1.7; task 1.8 fills it with link CRUD over the service layer.
 - **2026-07-20 (1.6)** — The branded 404's report link points at `//{short_host}/report`,
   which is a reserved slug that 404s until the report page ships in Phase 3 (ADR-005 §7).
   The link is forward-looking on purpose; it goes live when Phase 3 adds the page.

@@ -38,7 +38,7 @@
 - [x] 1.4 Migrations: `links` (unique slug index, `is_active` indexed, `user_id` FK cascade), `Link` model + factory, `User->links()`; users/sessions per Laravel default; auth-mode groundwork (config `auth_mode`; SSO columns deferred to Phase 5). Schema tests green.
 - [x] 1.5 Slug engine: `SlugGenerator` base62 6–7 with collision retry + widening (AC-7/AC-8), `ReservedSlug` rule (`[A-Za-z0-9_-]{3,32}` + case-insensitive reserved list, AC-9/AC-10), `LinkTargetUrl` http/https whitelist (AC-11). Both rules adapted from nexo-links (CATALOG). 19 tests green.
 - [x] 1.6 Redirect host: `then:`-registered host-scoped routes (short host cookieless), `RedirectController` 302 + `no-store` (AC-1), `ShortHostHeaders` X-Robots-Tag noindex + no-store (AC-2), branded `errors/404` with panel + report links (AC-3), kill-switch 404s next request (AC-4), anti-301 guard grep (AC-5), `RobotsController` Disallow all + panel NOT noindex (AC-6). 38 tests green.
-- [ ] 1.7 Standalone local auth (self-host default; registration closable by env), rate-limited, secure sessions — reusing sibling patterns.
+- [x] 1.7 Standalone local auth: LoginRequest (per-email+IP rate limit, AC-13), AuthenticatedSessionController + RegisteredUserController, `EnsureRegistrationOpen` env gate (AC-14), secure http-only sessions, self-contained auth views + `<x-layout>`. Password reset/email-verification deferred (SPEC note). Adapted from Breeze/nexo-links (CATALOG). 45 tests green.
 - [ ] 1.8 Panel: create/list/deactivate links over the service layer; i18n'd UI; attribution footer.
 - [ ] 1.9 Phase reconciliation: SPEC ↔ implementation, `docs/ARCHITECTURE.md` first version, AGENTS.md updated.
 

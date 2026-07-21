@@ -1,7 +1,23 @@
 {
+    "Active": "Activo",
+    "Already have an account? Sign in": "¿Ya tienes una cuenta? Inicia sesión",
+    "Confirm password": "Confirmar contraseña",
     "Cookieless click metrics. Privacy by design. Self-hostable.": "Métricas de clics sin cookies. Privacidad por diseño. Autoalojable.",
+    "Create an account": "Crear una cuenta",
+    "Email": "Correo electrónico",
+    "Inactive": "Inactivo",
     "Link not found": "Enlace no encontrado",
+    "Name": "Nombre",
+    "No links yet.": "Aún no hay enlaces.",
+    "Password": "Contraseña",
+    "Remember me": "Recuérdame",
     "Report this link": "Reportar este enlace",
+    "Short link": "Enlace corto",
     "Short links on your own domain": "Enlaces cortos en tu propio dominio",
-    "This short link does not exist or is no longer active.": "Este enlace corto no existe o ya no está activo."
+    "Sign in": "Iniciar sesión",
+    "Sign out": "Cerrar sesión",
+    "Status": "Estado",
+    "Target": "Destino",
+    "This short link does not exist or is no longer active.": "Este enlace corto no existe o ya no está activo.",
+    "Your links": "Tus enlaces"
 }
