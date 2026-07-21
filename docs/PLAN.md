@@ -4,7 +4,7 @@
 >
 > Phase 1 is pre-broken into tasks by explicit owner instruction; they get reconciled against the Phase 1 SPEC's acceptance criteria when the phase opens (any divergence is amended in this file, dated). Later phases list objective, key work and gate criteria only.
 >
-> **External dependency**: the public launch of the hosted instance waits for Nexo ID (provider live, Phase 2 of its plan) per ADR-003. Development here does not wait — Phases 1–3 build on standalone auth.
+> **External dependency** (re-anchored 2026-07-20, ADR-003 Update): nexo-id's provider is already **live in production** (its Phases 1–2 closed; contract in its `docs/INTEGRATION.md`). What still gates the public launch is **nexo-id T4: verified backups + uptime monitoring** (deferred there to a cross-tool ops pass) — hard condition on Gate 5. The reusable OIDC client pattern is built in nexo-id Phase 3 *with this project as first consumer*, coordinated with Alvaro. Development here does not wait — Phases 1–3 build on standalone auth.
 
 ## Phase 0 — Planning & foundations (current)
 
@@ -16,13 +16,14 @@
 - [x] 0.4 Foundational ADRs 001–007, status Proposed.
 - [x] 0.5 `docs/PLAN.md` (this file) with phases and gates.
 - [x] 0.6 Project formalization: `AGENTS.md` (EN), `CLAUDE.md` → AGENTS, `CLAUDE.local.md` (gitignored) with standards briefing, `README.md` with Status line, `.gitignore`, MIT `LICENSE`, git init, private GitHub repo (final destination: `nexo-tools` org).
-- [ ] 0.7 Ops (Alvaro, Cloudflare panel — pending from the brief's post-purchase checklist): temporary redirect rule `nxo.li/*` → `alvarocdev.com` so the domain is useful from day 1.
-- [ ] 0.8 Present plan + ADRs to Alvaro; resolve open points; stamp sign-off.
+- [x] 0.7 Re-validation against the updated planning prompt (2026-07-20): ADR-003 amended (nexo-id provider live; launch condition re-anchored to its T4), ADR-005 gains the target-scheme whitelist, ADR-008 added (short domain noindex), task 1.2 switched to the shared `dev-environment` standard, AGENTS.md updated.
+- [ ] 0.8 Ops (Alvaro, Cloudflare panel — pending from the brief's post-purchase checklist): temporary redirect rule `nxo.li/*` → `alvarocdev.com` so the domain is useful from day 1.
+- [ ] 0.9 Present plan + ADRs to Alvaro; resolve open points; stamp sign-off.
 
 **Gate 0 (owner sign-off required):**
-- [ ] ADRs 001–007 reviewed and accepted (or amended here, dated).
+- [ ] ADRs 001–008 reviewed and accepted (or amended here, dated).
 - [ ] SCOPE MVP in/out approved.
-- [ ] Open points confirmed: repo slug `nexo-short`; Safe Browsing fail-open vs fail-closed default (ADR-005, can also be settled in the Phase 1/3 SPEC).
+- [ ] Open points confirmed: Safe Browsing fail-open vs fail-closed default (ADR-005, can also be settled in the Phase 1/3 SPEC); whether redirect latency gets an early measurement spike in Phase 1 or waits for the Phase 4 production measurement (ADR-002).
 - [ ] Sign-off: pending.
 
 ## Phase 1 — Core shortener (standalone)
@@ -30,11 +31,11 @@
 **Objective:** working shortener with panel on local auth — redirect, slugs, CRUD, kill-switch — SPEC-first, sibling conventions installed from the start. No public exposure.
 
 - [ ] 1.1 `SPEC.md` for the core: env contract (short/panel domain, auth mode, attribution), data model, redirect flow, slug rules, auth modes, service-layer boundary (ADR-007), numbered ACs mapped to tests.
-- [ ] 1.2 Scaffold: Laravel latest via `laravel-bootstrap-docker-only` (Sail, no local PHP); Pest/Pint/Larastan; CI per nexo-agenda reference (lint + static analysis + tests + `composer audit`).
+- [ ] 1.2 Scaffold: Laravel latest via `laravel-bootstrap-docker-only` (Sail, no local PHP) on the shared **`dev-environment`** standard (already installed at `~/dev-environment` — do NOT reinstall): create database `nexo_short` in the shared MySQL (standard port 3306, `dev`/`dev`), app compose ships ONLY the app runtime (no DB/mail services), pin `APP_PORT`/`VITE_PORT`/`WWWUSER`/`WWWGROUP` in `.env`, tests on SQLite `:memory:`; Pest/Pint/Larastan; CI per nexo-agenda reference (lint + static analysis + tests + `composer audit`).
 - [ ] 1.3 Canonical ecosystem pieces (CATALOG sources noted in AGENTS.md): i18n generator en/es/pt + guardian test, SecurityHeaders/CSP + `.htaccess` sync test, brand assets generator, `NEXO_ATTRIBUTION_*` footer.
 - [ ] 1.4 Migrations: `links` (unique slug index, `is_active`, user FK), users/sessions per Laravel + auth-mode groundwork.
-- [ ] 1.5 Slug engine: base62 random 6–7 with collision retry, custom slug validation (`[a-zA-Z0-9_-]{3,32}`), reserved list (adapted from nexo-links) — with tests exercising the list and collisions.
-- [ ] 1.6 Redirect host: host-scoped routes, 302 + `no-store`, inactive/unknown → branded 404 with report link; guard tests from ADR-004 (grep for 301, status/header assertions).
+- [ ] 1.5 Slug engine: base62 random 6–7 with collision retry, custom slug validation (`[a-zA-Z0-9_-]{3,32}`), reserved list + target scheme whitelist (both adapted from nexo-links per CATALOG) — with tests exercising the list, the whitelist and collisions.
+- [ ] 1.6 Redirect host: host-scoped routes, 302 + `no-store`, inactive/unknown → branded 404 with report link, `X-Robots-Tag: noindex` + restrictive robots.txt (ADR-008); guard tests from ADR-004/008 (grep for 301, status/header assertions, landing NOT noindex).
 - [ ] 1.7 Standalone local auth (self-host default; registration closable by env), rate-limited, secure sessions — reusing sibling patterns.
 - [ ] 1.8 Panel: create/list/deactivate links over the service layer; i18n'd UI; attribution footer.
 - [ ] 1.9 Phase reconciliation: SPEC ↔ implementation, `docs/ARCHITECTURE.md` first version, AGENTS.md updated.
@@ -69,11 +70,11 @@ Key work: deploy via `deploy-laravel-hostinger` playbook (no clean-slate rule); 
 
 **Objective:** hosted instance goes SSO-only and public; repo goes public.
 
-**Depends on:** nexo-id Phase 2 (provider live); coordinates with nexo-id Phase 3 (Nexo Short is its first client — the OIDC client pattern is built there and consumed here).
+**Depends on:** nexo-id Phase 3 (the reusable OIDC client pattern is built there *with this project as first consumer* — coordinated with Alvaro; nothing gets implemented in the nexo-id repo unilaterally from here) and **nexo-id T4 (verified backups + uptime)** before real users. The provider itself is already live; integration follows nexo-id `docs/INTEGRATION.md` (discovery at runtime, client registered via `nexo:sso-client`, code + PKCE).
 
 Key work: SSO integration (`NEXO_SSO_*` env contract, account linking, graceful degradation per ADR-003); hosted instance switched to SSO-only with registration via Nexo ID; landing with SEO base (validate-generated-site checklist) on the panel domain; `audit-open-source` pass → repo public; README as portfolio piece (architecture documented); launch.
 
-**Gate 5:** mirror of nexo-id Gate 3 — real signup→login→create→click flow via Nexo ID from nxo.li; degradation verified (Nexo ID down → active sessions and redirects keep working); standalone mode still green in the suite (self-host story intact); audit passed and repo public; owner sign-off = **public launch**.
+**Gate 5:** mirror of nexo-id Gate 3 — real signup→login→create→click flow via Nexo ID from nxo.li; degradation verified (Nexo ID down → active sessions and redirects keep working); standalone mode still green in the suite (self-host story intact); audit passed and repo public; **external hard condition: nexo-id T4 done (verified backups + uptime on the identity provider)** — no real users before that; owner sign-off = **public launch**.
 
 ## Post-v1 backlog
 

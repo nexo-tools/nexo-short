@@ -17,7 +17,8 @@ Alvaro's hosted instance: redirects on **nxo.li** (and only redirects — reputa
 - **Link management panel**: create, list, deactivate (kill-switch), per-link stats.
 - **Auth**: standalone local auth ships in the code (self-host default, per nexo-id ADR-004); Alvaro's hosted instance runs **SSO-only via Nexo ID** — public launch waits for it (ADR-003). No public registration surface of its own on the hosted instance.
 - **Basic metrics**, cookieless and without raw IPs: clicks total and per day, referrer, device class, country (Cloudflare header); simple per-day chart in the panel (ADR-006).
-- **Anti-abuse package** (launch requirement, not a feature — ADR-005): account-gated creation, Google Safe Browsing check at creation, rate limiting, reserved slugs, kill-switch, report channel, published terms of use.
+- **Anti-abuse package** (launch requirement, not a feature — ADR-005): account-gated creation, target scheme whitelist (http/https only), Google Safe Browsing check at creation, rate limiting, reserved slugs, kill-switch, report channel, published terms of use.
+- **Short domain is noindex** (ADR-008): `X-Robots-Tag` + restrictive robots.txt on the redirect host; the SEO base lives on the landing.
 - **Nexo product conventions**: i18n en/es/pt, instance-configurable attribution (`NEXO_ATTRIBUTION_*`), strict CSP + sync test, zero external requests at runtime (browser surface), CI with lint + static analysis + tests + dependency audit.
 - **Multi-instance by design**: the short domain belongs to the instance (env), not the code (ADR-001).
 

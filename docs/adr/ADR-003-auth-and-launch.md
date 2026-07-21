@@ -1,6 +1,6 @@
 # ADR-003 — Auth and launch: hosted instance is SSO-only via Nexo ID; public launch waits for it; standalone auth still ships in the code
 
-- **Date:** 2026-07-19
+- **Date:** 2026-07-19 (amended 2026-07-20 — see "Update" below)
 - **Status:** Proposed (core decision taken by Alvaro during Phase 0 planning, 2026-07-19; formal acceptance at Gate 0)
 
 ## Context
@@ -32,3 +32,11 @@ The open decision was the launch strategy for the hosted instance: couple to Nex
 - Nexo Short's SSO integration reuses the client pattern nexo-id builds in its Phase 3 (OIDC client + `NEXO_SSO_*` env + local session + graceful degradation) — coordination point between both plans.
 - Until launch, the deployed instance (Phase 4 dark deploy) runs with registration closed: local auth exists but no public signup.
 - Standalone auth is real product surface (self-hosters), not scaffolding: it gets the same SPEC/AC/test discipline (rate-limited login, secure sessions), reusing sibling patterns.
+
+## Update — 2026-07-20 (nexo-id state changed; launch condition re-anchored)
+
+nexo-id closed its Phases 1–2 (audited "yes with conditions"): the OIDC provider is **live in production** at `nexoid.alvarocdev.com` (46/46 ACs), with the integration contract published in its `docs/INTEGRATION.md`. Consequences for this ADR:
+
+- The "provider live" precondition of Decision §2 is **already satisfied** — it no longer gates anything.
+- The launch condition inherited from nexo-id's audit replaces it: **the hosted instance does not launch to real users until nexo-id has verified backups + uptime monitoring** (its deferred T4, planned as a cross-tool ops pass). Recorded as an external condition of this project's launch gate (PLAN Gate 5).
+- The reusable OIDC client pattern still does **not** exist: nexo-id's Phase 3 builds it *with Nexo Short as first consumer*. Anything touching the nexo-id side is planned with Alvaro — this project does not implement in that repo on its own.

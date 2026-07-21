@@ -9,7 +9,7 @@ Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo I
 
 ## Stack
 
-Decided in ADR-002 (pending Gate 0 acceptance): Laravel (latest) + MySQL on Hostinger shared hosting, one app serving both hosts via host-scoped routes; Cloudflare free (proxied) in front of the short domain. Local dev via Sail (`laravel-bootstrap-docker-only` skill — no local PHP).
+Decided in ADR-002 (pending Gate 0 acceptance): Laravel (latest) + MySQL on Hostinger shared hosting, one app serving both hosts via host-scoped routes; Cloudflare free (proxied) in front of the short domain. Local dev via Sail (`laravel-bootstrap-docker-only` skill — no local PHP) on the shared **`dev-environment`** standard (`~/dev-environment`, already installed — never reinstall): database `nexo_short` in the shared MySQL (3306, `dev`/`dev`), app compose ships only the app runtime, `APP_PORT`/`VITE_PORT`/`WWWUSER`/`WWWGROUP` pinned in `.env`, tests on SQLite `:memory:`.
 
 ## How to run it
 
@@ -35,6 +35,9 @@ Not deployed. Planned (Phase 4): Hostinger shared via the `deploy-laravel-hostin
 
 ## Accumulated context
 
-- **2026-07-19** — External dependency: public launch gates on nexo-id Phase 2 (provider live); Nexo Short is nexo-id's Phase 3 first client — coordinate both plans. Nexo ID's accepted ADR-003 (OAuth2+PKCE/OIDC, no parent-domain cookie) and ADR-004 (tools ship standalone auth; SSO by env) supersede the auth sketches in the original evaluation docs (`nexoshort.md`, `nexo-id.md` §Auth).
+- **2026-07-19** — Coordination note from **Nexo Events** (Phase 0 planned, `/Users/alvarocarrizales/nexoevents`, its ADR-006): post-MVP it wants an auto short link per event, which requires **programmatic link creation by a trusted client** (HTTP API, env-configured — no DB coupling). Nexo Short's MVP has no public API (its ADRs) — this is a candidate for a later phase; non-blocking for both sides.
+- **2026-07-20** — nexo-id state updated (its Phases 1–2 closed, audited): the OIDC provider is **live** at nexoid.alvarocdev.com; integration contract = nexo-id `docs/INTEGRATION.md`. Launch condition re-anchored (ADR-003 Update): no real users until **nexo-id T4 (verified backups + uptime)** is done. The reusable OIDC client pattern does not exist yet — nexo-id Phase 3 builds it with this project as first consumer, coordinated with Alvaro (never implement in that repo unilaterally).
+- **2026-07-20** — ADR-008 added (short domain noindex); ADR-005 gained the target-scheme whitelist. CATALOG now lists both nexo-links source patterns (reserved names: `app/Rules/Username.php` + `config/nexo.php`; scheme whitelist: `app/Rules/LinkUrl.php`).
+- **2026-07-19** — External dependency context: Nexo ID's accepted ADR-003 (OAuth2+PKCE/OIDC, no parent-domain cookie) and ADR-004 (tools ship standalone auth; SSO by env) supersede the auth sketches in the original evaluation docs (`nexoshort.md`, `nexo-id.md` §Auth).
 - **2026-07-19** — The original evaluation brief lives at `nexoshort.md` (repo root, kept as historical input); where it conflicts with ADRs, the ADRs win.
-- **2026-07-19** — Pending ops (Alvaro, Cloudflare panel): temporary redirect rule nxo.li → alvarocdev.com (task 0.7).
+- **2026-07-19** — Pending ops (Alvaro, Cloudflare panel): temporary redirect rule nxo.li → alvarocdev.com (PLAN task 0.8).
