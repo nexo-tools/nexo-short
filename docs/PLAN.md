@@ -71,9 +71,11 @@
 - [x] 3.4 Report channel `/report` on the short host: no-auth, rate-limited, stores a report (AC-37/AC-38).
 - [x] 3.5 Terms of use page (panel host) (AC-39).
 - [x] 3.6 Operator moderation kill-switch: `nexo:link-deactivate`/`nexo:link-activate` commands (AC-40).
-- [ ] 3.7 Reconciliation: SPEC ↔ impl, ARCHITECTURE + AGENTS updated.
+- [x] 3.7 Reconciliation: SPEC ↔ impl (no divergence), ARCHITECTURE + AGENTS updated, AC-32…AC-40 grep-verified.
 
 **Gate 3 (blocks any public exposure):** deliberate-violation evidence — rate limit actually blocks, Safe Browsing test URL rejected, reserved slugs unregistrable, deactivated link dead immediately; security audit exercised (not theoretical) per standards; owner sign-off.
+
+**Gate 3 status (2026-07-20):** technical criteria met — deliberate-violation tests green: creation rate limit blocks (AC-32/AC-33, 429), report rate limit blocks (AC-38), Safe Browsing test URL rejected (AC-34), reserved slug unregistrable (AC-10), `javascript:`/`data:` target rejected (AC-11), link dead immediately on deactivate (AC-4/AC-16/AC-40). AC-32…AC-40 name-traced (grep). Full CI-equivalent green (90 tests). **Still required before public exposure (owner):** a real (not theoretical) security review per standards, and owner sign-off. **Safe Browsing failure-mode default = fail-open (configurable) — needs owner confirmation.**
 
 ## Phase 4 — Production deploy (dark) + ops baseline
 

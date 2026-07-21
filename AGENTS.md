@@ -5,7 +5,7 @@
 
 ## What this project is
 
-Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phases 1–2 implemented — core shortener (redirect host, slug engine, standalone auth, panel over a service layer) + click metrics (cookieless logging, per-link stats, privacy page). 31 ACs green (AC-1…AC-31); Gates 1 & 2 awaiting owner sign-off.** Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: Phases 1–3 implemented — core shortener + click metrics + the ADR-005 anti-abuse package (creation rate limits per user/IP, env-optional Safe Browsing, public `/report`, terms, operator moderation commands). 40 ACs green (AC-1…AC-40); Gates 1–3 awaiting owner sign-off. Next is Phase 4 (production deploy) — owner infra, not autonomous.** Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Stack
 

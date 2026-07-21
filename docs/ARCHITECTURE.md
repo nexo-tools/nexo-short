@@ -24,14 +24,16 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 |---|---|---|
 | short | `GET /{slug}` | [RedirectController](../app/Http/Controllers/RedirectController.php) → 302 + `no-store`, unknown/inactive → 404 |
 | short | `GET /robots.txt` | [RobotsController](../app/Http/Controllers/RobotsController.php) → `Disallow: /` |
+| short | `GET/POST /report` | [ReportController](../app/Http/Controllers/ReportController.php) — public, no-auth, `throttle:report` |
 | short | `GET /` | branded 404 (nothing to redirect) |
 | panel | `GET /` | landing ([welcome.blade.php](../resources/views/welcome.blade.php)) |
 | panel | `GET/POST /login`, `/logout` | [AuthenticatedSessionController](../app/Http/Controllers/Auth/AuthenticatedSessionController.php) |
 | panel | `GET/POST /register` | [RegisteredUserController](../app/Http/Controllers/Auth/RegisteredUserController.php), gated by `EnsureRegistrationOpen` |
 | panel | `GET /panel` | [LinkController@index](../app/Http/Controllers/LinkController.php) |
 | panel | `POST /links`, `PATCH /links/{link}/deactivate` | LinkController@store / @deactivate |
+| panel | `POST /links` | LinkController@store — `throttle:link-creation` (per user + IP) |
 | panel | `GET /links/{link}/stats` | LinkController@stats (owner-only) |
-| panel | `GET /privacy` | privacy page (ADR-006 disclosure) |
+| panel | `GET /privacy`, `GET /terms` | privacy (ADR-006) + terms of use (ADR-005 §8) |
 
 ## Layers
 
@@ -44,8 +46,13 @@ runs the cookieless `short` middleware group); the panel answers every other hos
   [DeviceClassifier](../app/Support/DeviceClassifier.php). No raw IP/UA at rest (ADR-006).
 - **Slug engine** ([SlugGenerator](../app/Support/SlugGenerator.php)) — unique base62,
   collision retry + widening.
+- **Anti-abuse (ADR-005)** — creation rate limiters (`link-creation` per user + IP, `report`
+  per IP; defined in `AppServiceProvider`), [SafeBrowsing](../app/Support/SafeBrowsing.php)
+  check at creation (env-optional, fail-open/closed), operator moderation commands
+  `nexo:link-deactivate` / `nexo:link-activate`.
 - **Validation rules** — [ReservedSlug](../app/Rules/ReservedSlug.php) (format + reserved
-  list), [LinkTargetUrl](../app/Rules/LinkTargetUrl.php) (http/https whitelist).
+  list), [LinkTargetUrl](../app/Rules/LinkTargetUrl.php) (http/https whitelist),
+  [NotFlaggedTargetUrl](../app/Rules/NotFlaggedTargetUrl.php) (Safe Browsing).
 - **Middleware** — `SecurityHeaders` (CSP, both hosts), `ShortHostHeaders` (noindex/no-store),
   `SetLocale` (panel only), `EnsureRegistrationOpen`.
 
@@ -53,8 +60,10 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 
 `users` (Laravel default) · `links` (`user_id` FK cascade, unique `slug`, `target_url`,
 `is_active` indexed) · `clicks` (`link_id` FK cascade, `visitor_hash`, `referrer_host`,
-`device`, `country`, `created_at`; no raw IP/UA — ADR-006). See
-[SPEC-phase-1-core.md](SPEC-phase-1-core.md) and [SPEC-phase-2-metrics.md](SPEC-phase-2-metrics.md).
+`device`, `country`, `created_at`; no raw IP/UA — ADR-006) · `reports` (`slug`, `reason`,
+`note`, `created_at`; no reporter identity — ADR-005). See
+[SPEC-phase-1-core.md](SPEC-phase-1-core.md), [SPEC-phase-2-metrics.md](SPEC-phase-2-metrics.md)
+and [SPEC-phase-3-anti-abuse.md](SPEC-phase-3-anti-abuse.md).
 
 ## Conventions
 
@@ -73,6 +82,5 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 
 ## Not here yet
 
-Anti-abuse package (Safe Browsing, creation rate limits) + `/report` + terms of use
-(Phase 3) · production deploy (Phase 4) · Nexo ID SSO (Phase 5) · public API (backlog,
-ADR-007).
+Production deploy (Phase 4) · Nexo ID SSO (Phase 5) · public API (backlog, ADR-007) ·
+periodic Safe Browsing re-check, moderation dashboard, report→email (ADR-005 backlog).
