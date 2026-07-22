@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\LinkController;
+use App\Http\Middleware\EnsureLocalAuth;
 use App\Http\Middleware\EnsureRegistrationOpen;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +15,14 @@ Route::middleware('setlocale')->group(function () {
     Route::get('terms', fn () => view('terms'))->name('terms');
 
     Route::middleware('guest')->group(function () {
+        // The login page stays reachable in every mode (it hosts the SSO button);
+        // the local credential POST is closed when the instance is SSO-only.
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
-        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware(EnsureLocalAuth::class);
 
-        // Registration is closable by env (self-host default open; hosted = SSO-only).
-        Route::middleware(EnsureRegistrationOpen::class)->group(function () {
+        // Registration: off in SSO-only mode, and otherwise closable by env
+        // (self-host default open; hosted instance keeps it closed).
+        Route::middleware([EnsureLocalAuth::class, EnsureRegistrationOpen::class])->group(function () {
             Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
             Route::post('register', [RegisteredUserController::class, 'store'])->middleware('throttle:10,1');
         });
