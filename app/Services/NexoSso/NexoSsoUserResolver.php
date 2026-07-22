@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
  */
 class NexoSsoUserResolver
 {
+    /** @param array<string, mixed> $claims */
     public function resolve(array $claims): User
     {
         $sub = (string) ($claims['sub'] ?? '');
@@ -51,7 +52,11 @@ class NexoSsoUserResolver
         return $user;
     }
 
-    /** ADAPTATION POINT — align with this tool's users table. */
+    /**
+     * ADAPTATION POINT — align with this tool's users table.
+     *
+     * @param array<string, mixed> $claims
+     */
     protected function newUser(array $claims): User
     {
         $user = new User;
