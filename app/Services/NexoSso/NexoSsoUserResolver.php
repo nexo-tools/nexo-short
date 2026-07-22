@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
  */
 class NexoSsoUserResolver
 {
-    /** @param array<string, mixed> $claims */
+    /** @param  array<string, mixed>  $claims */
     public function resolve(array $claims): User
     {
         $sub = (string) ($claims['sub'] ?? '');
