@@ -7,3 +7,13 @@ parameters:
         - app
         - database
         - routes
+    # The nexo-sso-client template is canonical and must not be modified from here
+    # (its README hard rule). It omits iterable value-type docblocks that level 6
+    # flags; ignored here rather than forking the template. Proposed upstream to
+    # nexo-id/standards.
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+            paths:
+                - app/Services/NexoSso/*
+                - app/Http/Controllers/Auth/NexoSsoController.php

@@ -34,6 +34,7 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 | panel | `POST /links` | LinkController@store — `throttle:link-creation` (per user + IP) |
 | panel | `GET /links/{link}/stats` | LinkController@stats (owner-only) |
 | panel | `GET /privacy`, `GET /terms` | privacy (ADR-006) + terms of use (ADR-005 §8) |
+| panel | `GET /auth/nexo/redirect`, `GET /auth/nexo/callback` | Nexo ID SSO (only when `NEXO_SSO_ENABLED`; [NexoSsoController](../app/Http/Controllers/Auth/NexoSsoController.php)) |
 
 ## Layers
 
@@ -50,6 +51,10 @@ runs the cookieless `short` middleware group); the panel answers every other hos
   per IP; defined in `AppServiceProvider`), [SafeBrowsing](../app/Support/SafeBrowsing.php)
   check at creation (env-optional, fail-open/closed), operator moderation commands
   `nexo:link-deactivate` / `nexo:link-activate`.
+- **SSO (ADR-003)** — `App\Services\NexoSso\*` + `NexoSsoController`, the reusable
+  `nexo-sso-client` template (copied unmodified; OAuth2+PKCE/OIDC against Nexo ID). Off by
+  default (`NEXO_SSO_ENABLED=false`) → standalone auth intact; sessions are tool-owned
+  (provider downtime never logs anyone out). Callback on the **panel host**.
 - **Validation rules** — [ReservedSlug](../app/Rules/ReservedSlug.php) (format + reserved
   list), [LinkTargetUrl](../app/Rules/LinkTargetUrl.php) (http/https whitelist),
   [NotFlaggedTargetUrl](../app/Rules/NotFlaggedTargetUrl.php) (Safe Browsing).
@@ -82,5 +87,6 @@ and [SPEC-phase-3-anti-abuse.md](SPEC-phase-3-anti-abuse.md).
 
 ## Not here yet
 
-Production deploy (Phase 4) · Nexo ID SSO (Phase 5) · public API (backlog, ADR-007) ·
-periodic Safe Browsing re-check, moderation dashboard, report→email (ADR-005 backlog).
+Production deploy (Phase 4) · SSO-only switch + SEO landing + open-sourcing + launch
+(Phase 5 remainder) · public API (backlog, ADR-007) · periodic Safe Browsing re-check,
+moderation dashboard, report→email (ADR-005 backlog).

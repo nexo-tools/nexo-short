@@ -89,9 +89,14 @@ Key work: deploy via `deploy-laravel-hostinger` playbook (no clean-slate rule); 
 
 **Objective:** hosted instance goes SSO-only and public; repo goes public.
 
-**Depends on:** nexo-id Phase 3 (the reusable OIDC client pattern is built there *with this project as first consumer* — coordinated with Alvaro; nothing gets implemented in the nexo-id repo unilaterally from here) and **nexo-id T4 (verified backups + uptime)** before real users. The provider itself is already live; integration follows nexo-id `docs/INTEGRATION.md` (discovery at runtime, client registered via `nexo:sso-client`, code + PKCE).
+**Depends on:** the reusable OIDC client pattern (**delivered 2026-07-21** as `~/alvaro/templates/nexo-sso-client/`, built in nexo-id Phase 3 with this project as first consumer) and **nexo-id T4 (verified backups + uptime)** before real users.
 
-Key work: SSO integration (`NEXO_SSO_*` env contract, account linking, graceful degradation per ADR-003); hosted instance switched to SSO-only with registration via Nexo ID; landing with SEO base (validate-generated-site checklist) on the panel domain; `audit-open-source` pass → repo public; README as portfolio piece (architecture documented); launch.
+- [x] 5.1 **SSO client integration** (2026-07-21): copied the `nexo-sso-client` template (unmodified per its hard rule), adapted only the allowed points (`intended` → `route('panel')`; `newUser` matches the users table as-is; `login` route exists). `firebase/php-jwt`, `config/nexo-sso.php`, `routes/nexo-sso.php` (required in `routes/web.php`, panel host), `add_nexo_id_sub_to_users_table` migration, `NexoSso*` services + controller, 16 AC-tested Pest tests (CFG/FLOW/LINK/SESS/DEGRADE) all green. `NEXO_SSO_ENABLED=false` default → standalone auth intact, no SSO routes. "Continue with Nexo ID" button on login (i18n en/es/pt). `phpstan.neon` ignores the template's iterable-type nags (proposed upstream). 106 tests green.
+  - ⚠️ **BLOCKER for the real flow (owner + nexo-id):** the client is registered on the provider with redirect `https://nxo.li/auth/nexo/callback`, but Nexo Short serves auth on the **panel host** (`nexoshort.alvarocdev.com`) — nxo.li is cookieless (ADR-001) and cannot hold the OIDC session. **Re-register the client with `https://nexoshort.alvarocdev.com/auth/nexo/callback`** (coordinate with Alvaro/nexo-id). Does not block the code/tests.
+- [ ] 5.2 Hosted instance switched to SSO-only (registration via Nexo ID); `NEXO_AUTH_MODE`/UI reflect SSO-only on the hosted instance (self-host keeps standalone). *(Product/launch step.)*
+- [ ] 5.3 Landing with SEO base (validate-generated-site checklist) on the panel domain.
+- [ ] 5.4 `audit-open-source` pass → repo public; README as portfolio piece.
+- [ ] 5.5 Launch (needs Phase 4 deployed + nexo-id T4).
 
 **Gate 5:** mirror of nexo-id Gate 3 — real signup→login→create→click flow via Nexo ID from nxo.li; degradation verified (Nexo ID down → active sessions and redirects keep working); standalone mode still green in the suite (self-host story intact); audit passed and repo public; **external hard condition: nexo-id T4 done (verified backups + uptime on the identity provider)** — no real users before that; owner sign-off = **public launch**.
 

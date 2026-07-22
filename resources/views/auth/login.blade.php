@@ -25,6 +25,12 @@
         <button type="submit">{{ __('Sign in') }}</button>
     </form>
 
+    @if (config('nexo-sso.enabled'))
+        <p style="margin-top: 1rem;">
+            <a href="{{ route('nexo-sso.redirect') }}">{{ __('Continue with Nexo ID') }}</a>
+        </p>
+    @endif
+
     @if (config('nexo.allow_registration'))
         <p class="muted" style="margin-top: 1.25rem;">
             <a href="{{ route('register') }}">{{ __('Create an account') }}</a>

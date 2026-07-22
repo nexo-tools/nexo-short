@@ -34,3 +34,9 @@ Route::middleware('setlocale')->group(function () {
         Route::get('links/{link}/stats', [LinkController::class, 'stats'])->name('links.stats');
     });
 });
+
+// Nexo ID SSO (reusable client template, ADR-003). No-op when NEXO_SSO_ENABLED is
+// false (default): standalone auth stays intact and no SSO routes are registered.
+// These routes live on the panel host (they need a session — the short host is
+// cookieless), so the provider's redirect URI must be on the panel host.
+require __DIR__.'/nexo-sso.php';
