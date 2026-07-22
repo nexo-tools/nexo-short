@@ -95,7 +95,7 @@ Key work: deploy via `deploy-laravel-hostinger` playbook (no clean-slate rule); 
   - ✅ **Redirect URI corrected (2026-07-22):** client re-registered on the provider with `https://nexoshort.alvarocdev.com/auth/nexo/callback` (panel host) — coordinated with Alvaro/nexo-id.
   - ✅ **Template iterable-type docblocks fixed upstream** (alvaro `3c86077`); resolver re-synced from the template and the temporary `phpstan.neon` ignore removed — the copy is byte-for-byte canonical again.
 - [x] 5.2 **SSO-only auth mode** (ADR-003 §4): `EnsureLocalAuth` middleware 404s the local login POST + registration when `NEXO_AUTH_MODE=sso`; the login page hides the local form and shows only "Continue with Nexo ID". `local`/`both` unchanged (self-host intact). AC-41/AC-42/AC-43 green. *(Flipping the hosted instance to `sso` + enabling SSO is the launch step.)*
-- [ ] 5.3 Landing with SEO base (validate-generated-site checklist) on the panel domain.
+- [x] 5.3 **SEO landing + brand assets** (validate-generated-site): landing rewritten with hero + features + full SEO head (title, description, canonical, OG/Twitter, valid JSON-LD SoftwareApplication, hreflang en/es/pt, favicons — all absolute, host-derived per ADR-001); brand binaries generated from `mark.svg` (favicons/OG); `PanelSeoController` serves panel `robots.txt` (Allow + Sitemap) and `sitemap.xml` (pages + hreflang); removed the static `public/robots.txt` that would have overridden the short host's Disallow in production. AC-44/AC-45/AC-46 green; 116 tests. Copy is a reasonable default — owner refines.
 - [ ] 5.4 `audit-open-source` pass → repo public; README as portfolio piece.
 - [ ] 5.5 Launch (needs Phase 4 deployed + nexo-id T4).
 

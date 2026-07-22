@@ -3,9 +3,15 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\PanelSeoController;
 use App\Http\Middleware\EnsureLocalAuth;
 use App\Http\Middleware\EnsureRegistrationOpen;
 use Illuminate\Support\Facades\Route;
+
+// Panel-host SEO surface (indexable — ADR-008). The short host's own robots.txt
+// (Disallow all) is domain-scoped and registered first, so it wins for nxo.li.
+Route::get('robots.txt', [PanelSeoController::class, 'robots']);
+Route::get('sitemap.xml', [PanelSeoController::class, 'sitemap']);
 
 // Panel host: landing, standalone local auth (ADR-003) and the panel. The short
 // host lives in routes/short.php. All panel routes negotiate locale (setlocale).
