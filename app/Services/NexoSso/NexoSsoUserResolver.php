@@ -55,7 +55,7 @@ class NexoSsoUserResolver
     /**
      * ADAPTATION POINT — align with this tool's users table.
      *
-     * @param array<string, mixed> $claims
+     * @param  array<string, mixed>  $claims
      */
     protected function newUser(array $claims): User
     {
