@@ -110,6 +110,8 @@ Key work: deploy via `deploy-laravel-hostinger` playbook (no clean-slate rule); 
 - [ ] 5.4b Flip repo public (**owner decision**) + README as portfolio piece.
 - [ ] 5.5 Launch (needs Phase 4 deployed + nexo-id T4).
 
+**Phase 5 status — SSO flipped live in production 2026-07-22 (dark → SSO-only):** `NEXO_AUTH_MODE=sso` + `NEXO_SSO_ENABLED=true` + Safe Browsing key set. Verified externally: `/login` shows only "Continue with Nexo ID", `/register` 404s, `/auth/nexo/redirect` → 302 to nexoid `oauth/authorize` with the correct client_id, panel-host `redirect_uri`, and PKCE S256. Gate 4 done (deploy + E2E + UptimeRobot monitors + alert test + backup restore). **Gate 5 remaining: nexo-id runs its Gate 3 e2e (real login round-trip + degradation — not curl-verifiable); repo-public (5.4b) at owner's discretion (audit clean).**
+
 **Gate 5:** mirror of nexo-id Gate 3 — real signup→login→create→click flow via Nexo ID from nxo.li; degradation verified (Nexo ID down → active sessions and redirects keep working); standalone mode still green in the suite (self-host story intact); audit passed and repo public; **external hard condition: nexo-id T4 done (verified backups + uptime on the identity provider)** — no real users before that; owner sign-off = **public launch**.
 
 ## Post-v1 backlog
