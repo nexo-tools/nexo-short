@@ -1,9 +1,18 @@
 # DEPLOYMENT — Nexo Short (Phase 4)
 
-> **Status: prepared, not executed.** This is the runbook for the Phase 4 *dark* deploy
-> (registration closed, no public users). It needs Alvaro's Hostinger + Cloudflare access;
-> the agent does not run it. Based on the `deploy-laravel-hostinger` skill, extended for the
-> **two-host** shape (one app serves the short host *and* the panel host — ADR-001/002).
+> **Status: DONE — deployed (dark) 2026-07-22.** nxo.li serves redirects, panel on
+> nexoshort.alvarocdev.com; registration closed, SSO off. This runbook records the exact
+> steps taken (guided with Alvaro). Based on the `deploy-laravel-hostinger` skill, extended
+> for the **two-host** shape (one app serves the short host *and* the panel host — ADR-001/002).
+>
+> **As-deployed facts** (differ slightly from the generic runbook below): DB host is
+> `localhost` (the MySQL grant is `@localhost`, not `@127.0.0.1`); nxo.li is a *separate site*
+> on the plan (`~/domains/nxo.li/public_html` symlinked cross-domain to
+> `~/domains/alvarocdev.com/nexo-short/public` — works here, no `open_basedir` block); the new
+> nxo.li site defaulted to an old PHP → bump it to 8.4+; **no** `npm run build` (inline styles);
+> `route:cache` is skipped (closure routes) — only `config:cache` + `view:cache`; Cloudflare's
+> "Managed robots.txt" must stay **off**. Remaining before launch: Gate 4 ops (UptimeRobot
+> canary `nxo.li/hb`=302 + `/up`=200, backup-restore test) then the Phase 5 SSO flip.
 
 ## Topology (what makes this different from the sibling tools)
 
@@ -113,3 +122,6 @@ browser console, and record the deploy date in [AGENTS.md](AGENTS.md) § Product
 Measure redirect latency from a realistic location once live (perf audit). If shared-hosting
 latency proves unacceptable, that triggers a new ADR (edge accelerator / VPS) — the env-decoupled
 short domain already keeps that migration open.
+
+**Measured 2026-07-22 (from South America):** `nxo.li/hb` warm TTFB ~108–117 ms (302), ~450 ms
+cold on the first hit. Well within acceptable; the ADR-002 revisit trigger is **not** met.

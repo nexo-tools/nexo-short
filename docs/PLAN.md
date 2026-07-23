@@ -85,6 +85,15 @@ Key work: deploy via `deploy-laravel-hostinger` playbook (no clean-slate rule); 
 
 **Gate 4:** real E2E on production (create link → click → 302 → stats recorded); backup restored for real once; monitors alerting verified (kill the canary deliberately); owner sign-off.
 
+**Phase 4 status — DEPLOYED (dark) 2026-07-22:**
+- [x] Deployed to Hostinger (app `~/domains/alvarocdev.com/nexo-short/`; panel = subdomain, nxo.li = separate site, both symlinked to the same `public/`) — see AGENTS.md § Production for the exact layout and gotchas (DB `@localhost`, PHP 8.4+ per site, no Vite build, no `route:cache`).
+- [x] nxo.li on Cloudflare (proxied, SSL Full, IP Geolocation on, `TRUSTED_PROXIES=*`); Managed-robots.txt turned off so the short host's `Disallow: /` is clean.
+- [x] **Real E2E passed:** `nxo.li/hb` → 302 → alvarocdev.com; click logged with `device`, `country=AR` (CF-IPCountry + trusted proxies working), hashed visitor (no raw IP). Redirect TTFB ~110 ms (ADR-002 trigger not met).
+- [x] **Production audit (22-agent workflow, adversarially verified):** secrets/.git/.env not exposed, APP_DEBUG off, strict CSP, all security headers present. Two short-host host-detection leaks found and **fixed** (sitemap.xml + www served the panel app — AC-47/AC-48); low hardening applied (stripped X-Powered-By / X-Turbo-Charged-By). 121 tests.
+- [ ] **Uptime monitoring** — add `nexoshort.alvarocdev.com/up` (200) + `nxo.li/hb` (302) to UptimeRobot with alerting; kill the canary once to confirm the alert. **(owner)**
+- [ ] **Backup restore tested once** — nexo-id's server backup auto-discovers the app; verify a real restore once. **(owner)**
+- [ ] Owner sign-off (after the two ops items above).
+
 ## Phase 5 — Nexo ID SSO, launch & open-sourcing
 
 **Objective:** hosted instance goes SSO-only and public; repo goes public.
