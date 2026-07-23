@@ -19,6 +19,11 @@ Route::post('/report', [ReportController::class, 'store'])->middleware('throttle
 // The short host serves redirects only — its root has nothing to redirect.
 Route::get('/', fn () => abort(404));
 
+// Catch EVERYTHING else on the short host so nothing leaks to the panel web
+// routes (which carry sessions and are indexable). A real slug redirects; any
+// other path (e.g. /sitemap.xml, multi-segment) 404s through the cookieless,
+// noindex, no-store 'short' stack. Static files (favicons) are served by the
+// web server before reaching here.
 Route::get('/{slug}', RedirectController::class)
-    ->where('slug', '[A-Za-z0-9_-]+')
+    ->where('slug', '.+')
     ->name('short.redirect');

@@ -14,12 +14,24 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function (): void {
+            $short = (string) config('nexo.short_host');
+
             // Two-host product (ADR-001/002). The short host is registered FIRST
             // and domain-scoped, so it always wins for redirect traffic; it runs a
             // cookieless stack (no session/CSRF) — just security + noindex/no-store.
             Route::middleware('short')
-                ->domain((string) config('nexo.short_host'))
+                ->domain($short)
                 ->group(base_path('routes/short.php'));
+
+            // Canonicalize www.<short-host> to the apex, still on the cookieless
+            // noindex stack — so the short domain never serves the indexable panel
+            // app (a host-detection leak) and short links resolve on www too.
+            Route::middleware('short')
+                ->domain('www.'.$short)
+                ->group(function () use ($short): void {
+                    Route::get('/{path?}', fn (string $path = '') => redirect()->away('https://'.$short.'/'.$path, 301))
+                        ->where('path', '.*');
+                });
 
             // The panel host answers on every other host (panel domain, and
             // localhost in dev/tests) with the full web stack.
