@@ -67,6 +67,26 @@ return Application::configure(basePath: dirname(__DIR__))
                 at: $proxies === '*' ? '*' : array_map('trim', explode(',', (string) $proxies)),
             );
         }
+
+        // TrustHosts allowlist (defense in depth). When enabled, the app answers
+        // ONLY on its own hosts — the short host and the panel host, each with an
+        // optional www. — so a spoofed Host header can't drive absolute-URL
+        // generation or cache poisoning. Derived from the two-host contract
+        // (ADR-001) so nothing is hardcoded. Off by default (same conditional
+        // shape as trustProxies) so local/dev and self-host setups keep working;
+        // the framework also no-ops it in the local env and under tests. Turn on
+        // in production (behind Cloudflare) with TRUST_HOSTS_ENABLED=true.
+        if (env('TRUST_HOSTS_ENABLED', false)) {
+            $hosts = array_values(array_filter(
+                [config('nexo.short_host'), config('nexo.panel_host')],
+                fn ($host): bool => is_string($host) && $host !== '',
+            ));
+
+            $middleware->trustHosts(
+                at: array_map(fn (string $host): string => '^(www\.)?'.preg_quote($host).'$', $hosts),
+                subdomains: false,
+            );
+        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
