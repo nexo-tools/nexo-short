@@ -55,11 +55,14 @@ it('AC-30: the stats page issues no external requests (inline SVG, CSP clean)', 
 
     $response->assertOk()->assertSee('<svg', false); // inline chart, not an external image/lib
 
-    // Zero external requests: no scripts at all, no resource `src=`, and a
-    // self-only CSP (internal navigation links may be absolute, that is fine).
+    // Zero external requests. The shared panel chrome adds one inline,
+    // hash-allow-listed theme-init <script> and same-origin <img src> marks —
+    // both same-origin, so no network egress. What must never appear is an
+    // external script or an off-origin resource src, and the CSP stays self-only.
     $body = (string) $response->getContent();
-    expect($body)->not->toContain('<script');
-    expect($body)->not->toContain('src=');
+    expect($body)->not->toContain('<script src')
+        ->and($body)->not->toContain('src="http')
+        ->and($body)->not->toContain("src='http");
 
     $csp = $response->headers->get('Content-Security-Policy');
     expect($csp)->toContain("default-src 'self'")->not->toContain('://');
