@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
@@ -12,23 +13,35 @@ class SetLocale
     private const SUPPORTED = ['en', 'es', 'pt'];
 
     /**
-     * Resolve the request locale from ?lang=, the session, or the Accept-Language
-     * header, in that order. Applied on the panel host only (the short host serves
-     * cookieless redirects with no session). Adapted from nexo-id (CATALOG).
+     * Resolve the request locale from ?lang=, then the shared `nexo-lang` cookie
+     * (scoped to the parent domain so the choice crosses every ecosystem tool),
+     * then the Accept-Language header, then the app default. Applied on the panel
+     * host only (the short host serves cookieless redirects with no session). The
+     * resolved locale is persisted back to `nexo-lang` (domain .alvarocdev.com in
+     * prod; host-only in local/dev). The cookie is excluded from encryption in
+     * bootstrap/app.php so every tool can read it. Adapted from nexo-id (CATALOG).
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $requested = $request->query('lang');
+        $locale = $request->query('lang');
 
-        if (is_string($requested) && in_array($requested, self::SUPPORTED, true)) {
-            $request->session()->put('locale', $requested);
+        if (! is_string($locale) || ! in_array($locale, self::SUPPORTED, true)) {
+            $locale = $request->cookie('nexo-lang');
+        }
+        if (! is_string($locale) || ! in_array($locale, self::SUPPORTED, true)) {
+            $locale = $request->getPreferredLanguage(self::SUPPORTED);
+        }
+        if (! is_string($locale) || ! in_array($locale, self::SUPPORTED, true)) {
+            $locale = config('app.locale');
         }
 
-        $locale = $request->session()->get('locale')
-            ?? $request->getPreferredLanguage(self::SUPPORTED)
-            ?? config('app.locale');
-
         app()->setLocale($locale);
+
+        if ($request->query('lang') || ! $request->cookie('nexo-lang')) {
+            $host = $request->getHost();
+            $domain = str_ends_with($host, 'alvarocdev.com') ? '.alvarocdev.com' : null;
+            Cookie::queue(cookie('nexo-lang', $locale, 525600, '/', $domain, $request->secure(), false, false, 'lax'));
+        }
 
         return $next($request);
     }

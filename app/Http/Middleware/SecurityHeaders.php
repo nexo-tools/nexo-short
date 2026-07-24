@@ -63,7 +63,7 @@ class SecurityHeaders
         $connect = "'self'";
 
         if (! $this->isShortHost($request)) {
-            $script .= " 'unsafe-eval' 'sha256-VnqPKwvTs0QV2DeudAl2kKmLKfpTJBYrwhm9uO7JLo4='";
+            $script .= " 'unsafe-eval' 'sha256-QY4re+NFw+ChK0c8H/EaTpktoUisSWU0fL7V6J43umM='";
         }
 
         // Allow the Vite dev server (and its websocket) while running HMR locally.

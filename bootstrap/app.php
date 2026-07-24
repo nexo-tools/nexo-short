@@ -46,6 +46,12 @@ return Application::configure(basePath: dirname(__DIR__))
             SecurityHeaders::class,
         ]);
 
+        // Shared preference cookies (theme + language) are scoped to the parent
+        // domain so they cross every ecosystem tool. Each tool has its own APP_KEY,
+        // so they must stay UNencrypted to be readable across tools. Only the panel
+        // (web) stack has EncryptCookies; the short host stays cookieless.
+        $middleware->encryptCookies(except: ['nexo-lang', 'nexo-theme']);
+
         // Short host: cookieless. Security headers + X-Robots-Tag noindex + no-store
         // on every response (ADR-004/008). No session, no CSRF, no cookies.
         $middleware->group('short', [

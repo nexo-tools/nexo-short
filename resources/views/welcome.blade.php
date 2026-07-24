@@ -42,7 +42,11 @@
     </x-slot:head>
 
     <x-slot:actions>
-        <a href="{{ route('login') }}" class="nexo-btn nexo-btn--primary">{{ __('Sign in') }}</a>
+        @auth
+            <a href="{{ route('panel') }}" class="nexo-btn nexo-btn--ghost">{{ __('Your links') }}</a>
+        @else
+            <a href="{{ route('login') }}" class="nexo-btn nexo-btn--primary">{{ __('Sign in') }}</a>
+        @endauth
     </x-slot:actions>
 
     <div class="mx-auto max-w-4xl px-6 py-16 sm:py-24">
