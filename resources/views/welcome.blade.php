@@ -35,7 +35,7 @@
         <meta property="og:title" content="{{ config('app.name') }} — {{ __('Short links on your own domain') }}">
         <meta property="og:description" content="{{ $description }}">
         <meta property="og:url" content="{{ $home }}">
-        <meta property="og:image" content="{{ url('/og.png') }}">
+        <meta property="og:image" content="{{ url('/og-image.png') }}">
         <meta name="twitter:card" content="summary_large_image">
 
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>

@@ -66,5 +66,5 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <text x="90" y="560" font-family="${FONT}" font-size="26" fill="${MUTED}">Part of the Nexo ecosystem · open source</text>
 </svg>`;
 
-await sharp(Buffer.from(og)).png().toFile(p('og.png'));
-console.log(`✓ ${p('og.png')}`);
+await sharp(Buffer.from(og)).png().toFile(p('og-image.png'));
+console.log(`✓ ${p('og-image.png')}`);
