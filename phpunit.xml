@@ -33,5 +33,6 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
         <env name="NEXO_SSO_ENABLED" value="true"/>
+        <env name="NEXO_ECOSYSTEM_CURRENT" value="nexoshort"/>
     </php>
 </phpunit>
