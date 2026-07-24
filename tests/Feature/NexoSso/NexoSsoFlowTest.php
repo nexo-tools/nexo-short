@@ -52,6 +52,18 @@ test('AC-FLOW-2: a mismatched or missing state is rejected before any provider c
     Http::assertNothingSent();
 });
 
+test('AC-FLOW-2: the user denying consent (provider error, no code) redirects to login with a safe error and no session', function (): void {
+    Http::fake();
+
+    nexoSsoDeniedCallback($this)
+        ->assertRedirect(route('login'))
+        ->assertSessionHasErrors('nexo_sso');
+    $this->assertGuest();
+
+    // Denial short-circuits before any token exchange.
+    Http::assertNothingSent();
+});
+
 test('AC-FLOW-3: a tampered id_token signature aborts login with a safe error', function (): void {
     $foreignKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
     openssl_pkey_export($foreignKey, $foreignPem);

@@ -59,8 +59,12 @@ if (! function_exists('nexoSsoIdToken')) {
 }
 
 if (! function_exists('nexoSsoFakeProvider')) {
-    /** Fakes discovery + JWKS + token endpoints. Pass the token response body (or a Closure/callable fake). */
-    function nexoSsoFakeProvider(?array $tokenResponse = null): void
+    /**
+     * Fakes discovery + JWKS + token endpoints. Pass the token response body and,
+     * to simulate a failing exchange, a non-2xx $tokenStatus (e.g. 400/500) so the
+     * service's ->throw() surfaces a Throwable.
+     */
+    function nexoSsoFakeProvider(?array $tokenResponse = null, int $tokenStatus = 200): void
     {
         $issuer = config('nexo-sso.issuer');
         $tokenResponse ??= ['access_token' => 'fake-access-token', 'token_type' => 'Bearer', 'id_token' => nexoSsoIdToken()];
@@ -74,7 +78,7 @@ if (! function_exists('nexoSsoFakeProvider')) {
                 'jwks_uri' => $issuer.'/oauth/jwks',
             ]),
             $issuer.'/oauth/jwks' => Http::response(['keys' => [nexoSsoKeypair()['jwk']]]),
-            $issuer.'/oauth/token' => Http::response($tokenResponse),
+            $issuer.'/oauth/token' => Http::response($tokenResponse, $tokenStatus),
         ]);
     }
 }
@@ -86,5 +90,15 @@ if (! function_exists('nexoSsoCallback')) {
         return $test
             ->withSession(['nexo_sso.state' => str_repeat('s', 40), 'nexo_sso.verifier' => str_repeat('v', 64)])
             ->get(route('nexo-sso.callback', ['code' => $code, 'state' => str_repeat('s', 40)]));
+    }
+}
+
+if (! function_exists('nexoSsoDeniedCallback')) {
+    /** Drives the callback as if the user denied consent: the provider returns error + state, no code. */
+    function nexoSsoDeniedCallback(TestCase $test, string $error = 'access_denied'): TestResponse
+    {
+        return $test
+            ->withSession(['nexo_sso.state' => str_repeat('s', 40), 'nexo_sso.verifier' => str_repeat('v', 64)])
+            ->get(route('nexo-sso.callback', ['error' => $error, 'state' => str_repeat('s', 40)]));
     }
 }
