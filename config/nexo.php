@@ -37,9 +37,25 @@ return [
 
     'attribution' => [
         'enabled' => env('NEXO_ATTRIBUTION_ENABLED', true),
+        // `text` drives the minimal short-host attribution (x-attribution); `label`
+        // is the canonical ecosystem powered-by shown in the panel's nexo-footer.
         'text' => env('NEXO_ATTRIBUTION_TEXT', 'Powered by alvarocdev.com'),
+        'label' => env('NEXO_ATTRIBUTION_LABEL'),
         'url' => env('NEXO_ATTRIBUTION_URL', 'https://alvarocdev.com'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Help center contact (nexo-ui help)
+    |--------------------------------------------------------------------------
+    |
+    | Where the /help "contact us" button points. A support URL wins; otherwise
+    | the app falls back to a mailto: on the support email.
+    |
+    */
+
+    'support_url' => env('NEXO_SUPPORT_URL'),
+    'support_email' => env('NEXO_SUPPORT_EMAIL', 'hola@alvarocdev.com'),
 
     /*
     |--------------------------------------------------------------------------
