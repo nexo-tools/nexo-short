@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-    <defs>
-        <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#6366f1"/>
-            <stop offset="1" stop-color="#d946ef"/>
-        </linearGradient>
-    </defs>
-    <!-- Two interlocking link halves (a chain link) — the shortener mark.
-         Rule (CATALOG): fill/stroke live on the paths, never the root <svg>. -->
-    <g transform="rotate(-45 32 32)" fill="none" stroke="url(#g)" stroke-width="7" stroke-linecap="round">
-        <path d="M27 20 h-5 a12 12 0 0 0 0 24 h5"/>
-        <path d="M37 20 h5 a12 12 0 0 1 0 24 h-5"/>
-        <path d="M24 32 h16"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Nexo Short">
+  <defs>
+    <linearGradient id="nexoTile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#nexoTile)"/>
+  <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="11" y1="24" x2="21" y2="24"/>
+    <path d="M17 20l4 4-4 4"/>
+    <line x1="37" y1="24" x2="27" y2="24"/>
+    <path d="M31 20l-4 4 4 4"/>
+  </g>
 </svg>

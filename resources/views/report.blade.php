@@ -24,7 +24,7 @@
             </label>
             <label>
                 {{ __('Details (optional)') }}
-                <textarea name="note" rows="3" maxlength="500" style="padding: .6rem .7rem; border-radius: .5rem; border: 1px solid #333; background: #141414; color: #fafafa; font-family: inherit;"></textarea>
+                <textarea name="note" rows="3" maxlength="500"></textarea>
             </label>
             <button type="submit">{{ __('Submit report') }}</button>
         </form>

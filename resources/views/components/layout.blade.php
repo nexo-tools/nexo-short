@@ -19,9 +19,9 @@
         a { color: #a5b4fc; }
         form { display: flex; flex-direction: column; gap: .9rem; }
         label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; color: #d4d4d4; }
-        input {
+        input, textarea, select {
             padding: .6rem .7rem; border-radius: .5rem; border: 1px solid #333;
-            background: #141414; color: #fafafa; font-size: 1rem;
+            background: #141414; color: #fafafa; font-size: 1rem; font-family: inherit;
         }
         button {
             padding: .65rem 1rem; border: 0; border-radius: .5rem; cursor: pointer;

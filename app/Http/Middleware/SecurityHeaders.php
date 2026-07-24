@@ -30,7 +30,7 @@ class SecurityHeaders
     private function headers(Request $request): array
     {
         $headers = [
-            'Content-Security-Policy' => $this->contentSecurityPolicy(),
+            'Content-Security-Policy' => $this->contentSecurityPolicy($request),
             'X-Content-Type-Options' => 'nosniff',
             'X-Frame-Options' => 'DENY',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
@@ -47,14 +47,24 @@ class SecurityHeaders
         return $headers;
     }
 
-    private function contentSecurityPolicy(): string
+    private function contentSecurityPolicy(Request $request): string
     {
-        // No inline <script> anywhere and no eval: scripts stay locked to 'self'.
+        // Host-scoped script policy (two-host isolation, ADR-001):
+        //  - Panel host: runs Alpine (needs 'unsafe-eval') and exactly one inline
+        //    <script>, the FOUC-free theme-init, allow-listed by its sha256 hash —
+        //    never 'unsafe-inline' for scripts. Recompute the hash if the snippet
+        //    in partials/theme-init.blade.php changes.
+        //  - Short host: cookieless redirects/report/404 with no JS at all, so it
+        //    keeps the tightest script-src ('self' only) — no eval, no hash.
         // Inline styles cover the odd style attribute; fonts are self-hosted, so
         // every source is same-origin. Zero external requests on the browser.
         $script = "'self'";
         $style = "'self' 'unsafe-inline'";
         $connect = "'self'";
+
+        if (! $this->isShortHost($request)) {
+            $script .= " 'unsafe-eval' 'sha256-VnqPKwvTs0QV2DeudAl2kKmLKfpTJBYrwhm9uO7JLo4='";
+        }
 
         // Allow the Vite dev server (and its websocket) while running HMR locally.
         if ($dev = $this->viteDevServer()) {
@@ -75,6 +85,20 @@ class SecurityHeaders
             "style-src {$style}",
             "connect-src {$connect}",
         ]);
+    }
+
+    /** The cookieless short host (apex or www) — kept on the tightest script-src. */
+    private function isShortHost(Request $request): bool
+    {
+        $short = (string) config('nexo.short_host');
+
+        if ($short === '') {
+            return false;
+        }
+
+        $host = $request->getHost();
+
+        return $host === $short || $host === 'www.'.$short;
     }
 
     private function viteDevServer(): ?string

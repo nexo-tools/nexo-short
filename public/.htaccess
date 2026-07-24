@@ -1,9 +1,11 @@
 # LiteSpeed's "Force HTTPS" injects a CSP that replaces the middleware's. Re-assert
-# the strict policy here so it wins. MUST match App\Http\Middleware\SecurityHeaders
-# exactly — SecurityHeadersHtaccessSyncTest fails on drift.
+# the strict policy here so it wins. This mirrors the PANEL-host CSP from
+# App\Http\Middleware\SecurityHeaders (the superset; the short host is served a
+# tighter script-src by the middleware). MUST match the panel policy exactly —
+# SecurityHeadersHtaccessSyncTest fails on drift.
 <IfModule mod_headers.c>
     Header always unset Content-Security-Policy
-    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; font-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; font-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-VnqPKwvTs0QV2DeudAl2kKmLKfpTJBYrwhm9uO7JLo4='; style-src 'self' 'unsafe-inline'; connect-src 'self'"
 
     # Drop stack-fingerprinting headers (defense-in-depth, audit hardening).
     Header always unset X-Powered-By

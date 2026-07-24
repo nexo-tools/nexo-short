@@ -1,9 +1,62 @@
 @import 'tailwindcss';
 
+/* Nexo brand tokens FIRST, then the shared chrome layer (header/footer/switchers).
+   Everything downstream reads var(--nexo-*) — no raw hex (NoHardcodedColorsTest). */
+@import './nexo-tokens.css';
+@import './nexo-ui.css';
+
+/* Dark utilities follow the stamped [data-theme="dark"] (theme-init + toggle),
+   not prefers-color-scheme — so an explicit choice wins over the OS. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Respect users who ask the OS to reduce motion (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* System fonts only — zero external requests (from nexo-tokens.css). */
+    --font-sans: var(--nexo-font-sans);
+    --font-mono: var(--nexo-font-mono);
+
+    /* Brand scale → Nexo violet tokens (see nexo-tokens.css / BRAND.md). */
+    --color-brand-50: var(--nexo-violet-50);
+    --color-brand-100: var(--nexo-violet-100);
+    --color-brand-200: var(--nexo-violet-200);
+    --color-brand-300: var(--nexo-violet-300);
+    --color-brand-400: var(--nexo-violet-400);
+    --color-brand-500: var(--nexo-violet-500);
+    --color-brand-600: var(--nexo-violet-600);
+    --color-brand-700: var(--nexo-violet-700);
+    --color-brand-800: var(--nexo-violet-800);
+    --color-brand-900: var(--nexo-violet-900);
+    --color-brand-950: var(--nexo-violet-950);
+
+    /* Semantic utilities so content uses bg-surface / text-ink / text-muted etc.
+       (theme-aware: they resolve to the light/dark value via data-theme). */
+    --color-bg: var(--nexo-bg);
+    --color-bg-subtle: var(--nexo-bg-subtle);
+    --color-surface: var(--nexo-surface);
+    --color-surface-raised: var(--nexo-surface-raised);
+    --color-ink: var(--nexo-text);
+    --color-muted: var(--nexo-text-muted);
+    --color-subtle: var(--nexo-text-subtle);
+    --color-line: var(--nexo-border);
+    --color-line-strong: var(--nexo-border-strong);
+    --color-success: var(--nexo-success);
+    --color-danger: var(--nexo-danger);
 }

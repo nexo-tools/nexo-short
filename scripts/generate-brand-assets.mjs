@@ -1,50 +1,70 @@
-// Generates favicons, touch icons, PWA manifest icons and the Open Graph image
-// from resources/brand/mark.svg. Adapted from the nexo-links canonical generator
-// (CATALOG). Rule: fill/stroke live on the SVG's paths, never the root <svg>.
-// Run after changing the mark: node scripts/generate-brand-assets.mjs
+// Nexo brand-asset generator (from ~/alvaro/templates/nexo-brand, tool-parameterized).
+// Derives favicons, touch icons, web-manifest icons and the Open Graph card from a
+// single mark SVG. Edit the CONFIG block, then: node scripts/generate-brand-assets.mjs
+// The mark is the design source of truth (templates/nexo-brand/marks/nexoshort.svg).
+
 import sharp from 'sharp';
 import pngToIco from 'png-to-ico';
 import { readFileSync, writeFileSync, copyFileSync } from 'node:fs';
 
-const mark = readFileSync('resources/brand/mark.svg');
+// ---------------------------------------------------------------------------
+// CONFIG — edit per tool.
+const CONFIG = {
+  mark: 'resources/brand/mark.svg', // this tool's Nexo mark (copied from nexo-brand/marks)
+  label: 'Nexo Short',              // wordmark shown on the OG card
+  tagline: 'Short links you own.',
+  publicDir: 'public',
+};
+// Brand constants (do not edit — from the Nexo palette).
+const VIOLET_600 = '#7c3aed';
+const INK = '#0b0b12';       // near-black violet-tinted OG background
+const FG = '#f8fafc';        // slate-50
+const MUTED = '#a5b4cf';     // muted slate/violet
+const FONT = 'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
+// ---------------------------------------------------------------------------
 
-// Favicon + app icons (transparent background).
+const mark = readFileSync(CONFIG.mark);
+const p = (f) => `${CONFIG.publicDir}/${f}`;
+
 const sizes = {
-    'public/favicon-16.png': 16,
-    'public/favicon-32.png': 32,
-    'public/apple-touch-icon.png': 180,
-    'public/icon-192.png': 192,
-    'public/icon-512.png': 512,
+  'favicon-16.png': 16,
+  'favicon-32.png': 32,
+  'apple-touch-icon.png': 180,
+  'icon-192.png': 192,
+  'icon-512.png': 512,
 };
 
 for (const [file, size] of Object.entries(sizes)) {
-    await sharp(mark).resize(size, size).png().toFile(file);
-    console.log(`✓ ${file}`);
+  await sharp(mark).resize(size, size).png().toFile(p(file));
+  console.log(`✓ ${p(file)}`);
 }
 
-// Explicit sizes keep the ico small (the default embeds a 256px layer).
-writeFileSync('public/favicon.ico', await pngToIco(['public/favicon-16.png', 'public/favicon-32.png']));
-console.log('✓ public/favicon.ico');
+// Explicit sizes keep the .ico small (the default embeds a 256px layer).
+writeFileSync(p('favicon.ico'), await pngToIco([p('favicon-16.png'), p('favicon-32.png')]));
+console.log(`✓ ${p('favicon.ico')}`);
 
-copyFileSync('resources/brand/mark.svg', 'public/favicon.svg');
-console.log('✓ public/favicon.svg');
+copyFileSync(CONFIG.mark, p('favicon.svg'));
+console.log(`✓ ${p('favicon.svg')}`);
 
-// Open Graph card (1200x630) — dark background with the centered mark.
+// Open Graph card (1200x630): the mark tile + wordmark + tagline on dark violet.
+const markInner = mark.toString()
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '');
+
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-    <defs>
-        <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#6366f1"/>
-            <stop offset="1" stop-color="#d946ef"/>
-        </linearGradient>
-    </defs>
-    <rect width="1200" height="630" fill="#0a0a0a"/>
-    <g transform="translate(524 227) scale(2.5) rotate(-45 32 32)" fill="none" stroke="url(#g)" stroke-width="7" stroke-linecap="round">
-        <path d="M27 20 h-5 a12 12 0 0 0 0 24 h5"/>
-        <path d="M37 20 h5 a12 12 0 0 1 0 24 h-5"/>
-        <path d="M24 32 h16"/>
-    </g>
-    <text x="600" y="470" fill="#fafafa" font-family="system-ui, sans-serif" font-size="52" font-weight="700" text-anchor="middle">Nexo Short</text>
+  <defs>
+    <radialGradient id="glow" cx="0.18" cy="0.2" r="0.9">
+      <stop offset="0" stop-color="${VIOLET_600}" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="${INK}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="${INK}"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <svg x="90" y="150" width="150" height="150" viewBox="0 0 48 48">${markInner}</svg>
+  <text x="270" y="270" font-family="${FONT}" font-size="84" font-weight="700" fill="${FG}">${CONFIG.label}</text>
+  <text x="272" y="340" font-family="${FONT}" font-size="36" fill="${MUTED}">${CONFIG.tagline}</text>
+  <text x="90" y="560" font-family="${FONT}" font-size="26" fill="${MUTED}">Part of the Nexo ecosystem · open source</text>
 </svg>`;
 
-await sharp(Buffer.from(og)).png().toFile('public/og.png');
-console.log('✓ public/og.png');
+await sharp(Buffer.from(og)).png().toFile(p('og.png'));
+console.log(`✓ ${p('og.png')}`);
