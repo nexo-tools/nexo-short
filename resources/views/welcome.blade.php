@@ -67,6 +67,7 @@
         </section>
 
         <nav class="mt-16 flex justify-center gap-6 text-sm text-muted" aria-label="Legal">
+            <a href="{{ route('help') }}" class="hover:text-ink">{{ __('nexo.help.title') }}</a>
             <a href="{{ route('privacy') }}" class="hover:text-ink">{{ __('Privacy') }}</a>
             <a href="{{ route('terms') }}" class="hover:text-ink">{{ __('Terms') }}</a>
         </nav>

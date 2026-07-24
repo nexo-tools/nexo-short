@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PanelSeoController;
 use App\Http\Middleware\EnsureLocalAuth;
@@ -19,6 +20,10 @@ Route::middleware('setlocale')->group(function () {
     Route::get('/', fn () => view('welcome'))->name('landing');
     Route::get('privacy', fn () => view('privacy'))->name('privacy');
     Route::get('terms', fn () => view('terms'))->name('terms');
+
+    // Help center (nexo-ui). Panel host only, before any catch-all (there is none
+    // on this host; the short-host {slug} catch-all lives in routes/short.php).
+    Route::get('help', HelpController::class)->name('help');
 
     Route::middleware('guest')->group(function () {
         // The login page stays reachable in every mode (it hosts the SSO button);
