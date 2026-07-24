@@ -6,6 +6,7 @@ use App\Models\Link;
 use App\Support\ClickRecorder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * The redirect hot path (ADR-004/006): indexed unique lookup on slug → active
@@ -23,7 +24,13 @@ class RedirectController extends Controller
         abort_if($link === null || ! $link->is_active, 404);
 
         // Server-side click logging (ADR-006), synchronous on the hot path (v1).
-        $clicks->record($request, $link);
+        // Metrics are best-effort: NO logging failure may break the 302, so any
+        // Throwable is reported and swallowed — the redirect always fires.
+        try {
+            $clicks->record($request, $link);
+        } catch (Throwable $e) {
+            report($e);
+        }
 
         // 302 + no-store (the no-store header is added by ShortHostHeaders).
         return redirect()->away($link->target_url, 302);

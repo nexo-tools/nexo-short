@@ -40,7 +40,9 @@ class ClickRecorder
             return null;
         }
 
-        return $host;
+        // Cap to the column width (255) so a hostile/oversized Referer can never
+        // overflow the insert and blow up the redirect hot path.
+        return mb_substr($host, 0, 255);
     }
 
     /** 2-letter country from Cloudflare's CF-IPCountry; null without it. */

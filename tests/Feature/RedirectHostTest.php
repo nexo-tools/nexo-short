@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Click;
 use App\Models\Link;
 use App\Models\User;
+use App\Support\ClickRecorder;
+use Illuminate\Http\Request;
 
 it('AC-1: active link returns 302 to the target with no-store', function () {
     $link = Link::factory()->for(User::factory())->create([
@@ -15,6 +18,47 @@ it('AC-1: active link returns 302 to the target with no-store', function () {
     $response->assertStatus(302);
     $response->assertHeader('Location', 'https://example.com/landing');
     expect($response->headers->get('Cache-Control'))->toContain('no-store');
+});
+
+it('AC-1: a Referer host over 255 chars still 302s and stores a host truncated to the column width', function () {
+    $link = Link::factory()->for(User::factory())->create([
+        'slug' => 'longref',
+        'target_url' => 'https://example.com/landing',
+        'is_active' => true,
+    ]);
+
+    // Host far beyond the referrer_host column (255). The redirect must survive.
+    $host = str_repeat('a', 300).'.com';
+    $response = $this->withHeaders(['referer' => 'https://'.$host.'/path'])
+        ->get(shortUrl('/'.$link->slug));
+
+    $response->assertStatus(302);
+    $response->assertHeader('Location', 'https://example.com/landing');
+
+    $stored = (string) Click::where('link_id', $link->id)->value('referrer_host');
+    expect(mb_strlen($stored))->toBeLessThanOrEqual(255);
+});
+
+it('AC-1: a click-logging failure never breaks the 302 (metrics are best-effort)', function () {
+    $link = Link::factory()->for(User::factory())->create([
+        'slug' => 'safe302',
+        'target_url' => 'https://example.com/x',
+        'is_active' => true,
+    ]);
+
+    // A recorder that always throws stands in for any metrics/DB failure on the
+    // hot path; the controller must still emit the redirect.
+    $this->app->instance(ClickRecorder::class, new class extends ClickRecorder
+    {
+        public function record(Request $request, Link $link): void
+        {
+            throw new RuntimeException('metrics down');
+        }
+    });
+
+    $this->get(shortUrl('/'.$link->slug))
+        ->assertStatus(302)
+        ->assertHeader('Location', 'https://example.com/x');
 });
 
 it('AC-2: redirect and 404 both carry X-Robots-Tag noindex', function () {
