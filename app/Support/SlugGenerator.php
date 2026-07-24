@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Link;
+use App\Rules\ReservedSlug;
 
 /**
  * Generates a random base62 slug of the configured length and guarantees it is
@@ -27,7 +28,11 @@ class SlugGenerator
             if (++$attempt % 5 === 0) {
                 $max++;
             }
-        } while ($this->exists($slug));
+
+            // Reject anything a user could never register either: a base62 slug
+            // may land on a reserved word (e.g. "report"), so apply the same
+            // reserved-list criterion as the ReservedSlug rule (ADR-005 §5).
+        } while ($this->exists($slug) || ReservedSlug::isReserved($slug));
 
         return $slug;
     }

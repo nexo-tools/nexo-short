@@ -41,6 +41,25 @@ it('AC-8: retries on collision and still returns a free slug', function () {
     expect($generator->generate())->toBe('FREE99');
 });
 
+it('AC-7: never returns a reserved slug even when the candidate generator proposes one', function () {
+    // First candidate is a reserved word ('report' ∈ config nexo.reserved_slugs),
+    // then a free non-reserved slug. The generator must skip the reserved one.
+    $generator = new class extends SlugGenerator
+    {
+        private int $calls = 0;
+
+        protected function randomString(int $length): string
+        {
+            return $this->calls++ === 0 ? 'report' : 'free01';
+        }
+    };
+
+    $slug = $generator->generate();
+
+    expect($slug)->toBe('free01')
+        ->and(ReservedSlug::isReserved($slug))->toBeFalse();
+});
+
 it('AC-9: rejects custom slugs outside the allowed format', function (string $slug) {
     $result = Validator::make(['slug' => $slug], ['slug' => new ReservedSlug]);
 

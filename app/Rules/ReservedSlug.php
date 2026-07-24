@@ -23,10 +23,20 @@ class ReservedSlug implements ValidationRule
             return;
         }
 
-        $reserved = array_map('strtolower', config('nexo.reserved_slugs'));
-
-        if (in_array(strtolower($value), $reserved, true)) {
+        if (self::isReserved($value)) {
             $fail('The :attribute ":input" is reserved.')->translate();
         }
+    }
+
+    /**
+     * Whether a slug collides with the reserved list (config/nexo.php),
+     * compared case-insensitively. Shared with SlugGenerator so generated and
+     * custom slugs are judged by the exact same criterion (ADR-005 §5).
+     */
+    public static function isReserved(string $slug): bool
+    {
+        $reserved = array_map('strtolower', config('nexo.reserved_slugs'));
+
+        return in_array(strtolower($slug), $reserved, true);
     }
 }
