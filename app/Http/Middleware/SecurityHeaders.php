@@ -64,6 +64,11 @@ class SecurityHeaders
 
         if (! $this->isShortHost($request)) {
             $script .= " 'unsafe-eval' 'sha256-QY4re+NFw+ChK0c8H/EaTpktoUisSWU0fL7V6J43umM='";
+            // Panel host only: permit the Nexo Tools hub so the opt-in cookieless
+            // pageview beacon (navigator.sendBeacon) is not blocked. It only fires
+            // when NEXO_BEACON_ENABLED renders the beacon metas. The short host is
+            // never widened — it stays connect-src 'self'. Mirror in .htaccess.
+            $connect .= ' https://nexotools.alvarocdev.com';
         }
 
         // Allow the Vite dev server (and its websocket) while running HMR locally.

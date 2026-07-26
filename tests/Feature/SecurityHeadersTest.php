@@ -22,9 +22,12 @@ it('AC-18: sends a self-contained content-security-policy with no external hosts
         ->toContain("form-action 'self'")
         ->toContain("script-src 'self'");
 
-    // No external host leaks into the policy — every source is self/data/inline.
-    expect($csp)->not->toContain('http://');
-    expect($csp)->not->toContain('https://');
+    // The only permitted external host is the Nexo Tools hub (opt-in cookieless
+    // beacon in connect-src on the panel host); nothing else leaks into the policy.
+    expect($csp)->toContain("connect-src 'self' https://nexotools.alvarocdev.com");
+    expect(str_replace('https://nexotools.alvarocdev.com', '', $csp))
+        ->not->toContain('http://')
+        ->not->toContain('https://');
 });
 
 it('AC-18: does not advertise HSTS over plain http', function () {

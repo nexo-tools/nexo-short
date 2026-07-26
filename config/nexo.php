@@ -147,4 +147,22 @@ return [
         'nexo', 'nexoshort', 'short', 'links', 'agenda', 'events', 'id',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cookieless ecosystem beacon (opt-in)
+    |--------------------------------------------------------------------------
+    |
+    | Off by default so a standalone install phones nobody home. When enabled,
+    | resources/js/nexo-beacon.js sendBeacon()s an anonymous pageview to the
+    | Nexo Tools hub. Wired into the PANEL host only (partials/head → beacon);
+    | the isolated short host stays cookieless and never emits it.
+    |
+    */
+
+    'beacon' => [
+        'enabled' => (bool) env('NEXO_BEACON_ENABLED', false),
+        'endpoint' => (string) env('NEXO_BEACON_ENDPOINT', 'https://nexotools.alvarocdev.com/beacon'),
+        'origin' => (string) env('NEXO_BEACON_ORIGIN', 'nexoshort'),
+    ],
+
 ];
