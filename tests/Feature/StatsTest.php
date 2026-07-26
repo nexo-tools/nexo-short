@@ -64,8 +64,13 @@ it('AC-30: the stats page issues no external requests (inline SVG, CSP clean)', 
         ->and($body)->not->toContain('src="http')
         ->and($body)->not->toContain("src='http");
 
-    $csp = $response->headers->get('Content-Security-Policy');
-    expect($csp)->toContain("default-src 'self'")->not->toContain('://');
+    // CSP stays self-only for resources. The one permitted external host is the
+    // Nexo Tools hub (opt-in cookieless beacon in connect-src) — a network
+    // permission, not a resource load, so the page still issues no external requests.
+    $csp = (string) $response->headers->get('Content-Security-Policy');
+    expect($csp)->toContain("default-src 'self'")
+        ->toContain("connect-src 'self' https://nexotools.alvarocdev.com");
+    expect(str_replace('https://nexotools.alvarocdev.com', '', $csp))->not->toContain('://');
 });
 
 it('AC-28: a user cannot view another user\'s stats', function () {
