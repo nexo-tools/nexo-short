@@ -38,6 +38,14 @@ if (! function_exists('nexoSsoKeypair')) {
     }
 }
 
+if (! function_exists('nexoSsoNonce')) {
+    /** The nonce the callback helper plants in the session and the default token echoes. */
+    function nexoSsoNonce(): string
+    {
+        return str_repeat('n', 40);
+    }
+}
+
 if (! function_exists('nexoSsoIdToken')) {
     /** Signed id_token with sane defaults; override any claim (null removes it). */
     function nexoSsoIdToken(array $overrides = [], ?string $signWithPem = null): string
@@ -48,6 +56,9 @@ if (! function_exists('nexoSsoIdToken')) {
             'sub' => 'user-uuid-0001',
             'exp' => time() + 300,
             'iat' => time(),
+            // Echoes the nonce the callback helper plants in the session, so the
+            // default id_token passes the nonce check. (AC-NONCE-1)
+            'nonce' => nexoSsoNonce(),
             'email' => 'user@example.com',
             'email_verified' => true,
             'name' => 'Test User',
@@ -62,21 +73,27 @@ if (! function_exists('nexoSsoFakeProvider')) {
     /**
      * Fakes discovery + JWKS + token endpoints. Pass the token response body and,
      * to simulate a failing exchange, a non-2xx $tokenStatus (e.g. 400/500) so the
-     * service's ->throw() surfaces a Throwable.
+     * service's ->throw() surfaces a Throwable. Set $advertiseEndSession=false to
+     * model a provider that publishes no end_session_endpoint (RP-logout absent).
      */
-    function nexoSsoFakeProvider(?array $tokenResponse = null, int $tokenStatus = 200): void
+    function nexoSsoFakeProvider(?array $tokenResponse = null, int $tokenStatus = 200, bool $advertiseEndSession = true): void
     {
         $issuer = config('nexo-sso.issuer');
         $tokenResponse ??= ['access_token' => 'fake-access-token', 'token_type' => 'Bearer', 'id_token' => nexoSsoIdToken()];
 
+        $discovery = [
+            'issuer' => $issuer,
+            'authorization_endpoint' => $issuer.'/oauth/authorize',
+            'token_endpoint' => $issuer.'/oauth/token',
+            'userinfo_endpoint' => $issuer.'/oauth/userinfo',
+            'jwks_uri' => $issuer.'/oauth/jwks',
+        ];
+        if ($advertiseEndSession) {
+            $discovery['end_session_endpoint'] = $issuer.'/oauth/logout';
+        }
+
         Http::fake([
-            $issuer.'/.well-known/openid-configuration' => Http::response([
-                'issuer' => $issuer,
-                'authorization_endpoint' => $issuer.'/oauth/authorize',
-                'token_endpoint' => $issuer.'/oauth/token',
-                'userinfo_endpoint' => $issuer.'/oauth/userinfo',
-                'jwks_uri' => $issuer.'/oauth/jwks',
-            ]),
+            $issuer.'/.well-known/openid-configuration' => Http::response($discovery),
             $issuer.'/oauth/jwks' => Http::response(['keys' => [nexoSsoKeypair()['jwk']]]),
             $issuer.'/oauth/token' => Http::response($tokenResponse, $tokenStatus),
         ]);
@@ -88,7 +105,11 @@ if (! function_exists('nexoSsoCallback')) {
     function nexoSsoCallback(TestCase $test, string $code = 'auth-code'): TestResponse
     {
         return $test
-            ->withSession(['nexo_sso.state' => str_repeat('s', 40), 'nexo_sso.verifier' => str_repeat('v', 64)])
+            ->withSession([
+                'nexo_sso.state' => str_repeat('s', 40),
+                'nexo_sso.verifier' => str_repeat('v', 64),
+                'nexo_sso.nonce' => nexoSsoNonce(),
+            ])
             ->get(route('nexo-sso.callback', ['code' => $code, 'state' => str_repeat('s', 40)]));
     }
 }
