@@ -9,7 +9,7 @@ Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo I
 
 ## Stack
 
-Decided in ADR-002 (Accepted, Gate 0 2026-07-21): Laravel (latest) + MySQL on Hostinger shared hosting, one app serving both hosts via host-scoped routes; Cloudflare free (proxied) in front of the short domain. Local dev via Sail (`laravel-bootstrap-docker-only` skill — no local PHP) on the shared **`dev-environment`** standard (`~/dev-environment`, already installed — never reinstall): database `nexo_short` in the shared MySQL (3306, `dev`/`dev`), app compose ships only the app runtime, `APP_PORT`/`VITE_PORT`/`WWWUSER`/`WWWGROUP` pinned in `.env`, tests on SQLite `:memory:`.
+Decided in ADR-002 (Accepted, Gate 0 2026-07-21): Laravel (latest) + MySQL on Hostinger shared hosting, one app serving both hosts via host-scoped routes; Cloudflare free (proxied) in front of the short domain. Local dev via Sail (`laravel-bootstrap-docker-only` skill — no local PHP) on the shared **`dev-environment`** standard (`~/dev-environment`, already installed — never reinstall): database `nexo_short` in the shared MySQL (host port 3307 since 2026-07-26 — compose project renamed to `nexo`, defaults like 3306 belong to the unrelated `work` stack; user/pass `dev`/`dev`), app compose ships only the app runtime, `APP_PORT`/`VITE_PORT`/`WWWUSER`/`WWWGROUP` pinned in `.env`, tests on SQLite `:memory:`.
 
 ## How to run it
 
