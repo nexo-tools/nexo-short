@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\NexoSsoSilentLogin;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\ShortHostHeaders;
@@ -44,6 +45,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // session, so it is aliased and applied to panel routes only.
         $middleware->web(append: [
             SecurityHeaders::class,
+            // Silent SSO trigger (prompt=none) — pass-through unless NEXO_SSO_ENABLED.
+            // Panel host only by construction: the short host never uses the web group.
+            NexoSsoSilentLogin::class,
         ]);
 
         // Shared preference cookies (theme + language) are scoped to the parent
