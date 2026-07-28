@@ -1,6 +1,6 @@
 <x-panel-layout :title="__('Your links')">
     <x-slot:actions>
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ config('nexo-sso.enabled') ? route('nexo-sso.logout') : route('logout') }}">
             @csrf
             <button type="submit" class="nexo-btn nexo-btn--ghost">{{ __('Sign out') }}</button>
         </form>
