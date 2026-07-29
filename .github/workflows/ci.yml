@@ -38,9 +38,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+
+      - run: npm ci
 
       - name: Translations (check in sync)
         run: node scripts/generate-translations.mjs --check
+
+      # The deploy builds assets; with auto-deploy on push, a broken build has to
+      # fail here and not on the way to production.
+      - name: Build front-end assets
+        run: npm run build
 
       - name: Pest (tests)
         run: |

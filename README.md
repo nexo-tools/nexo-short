@@ -12,7 +12,7 @@ Cookieless click metrics, anti-abuse built in, no raw IPs.
 ![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777bb4.svg)
 ![Laravel 13](https://img.shields.io/badge/Laravel-13-ff2d20.svg)
 
-[Live instance](https://nexoshort.alvarocdev.com) ·
+[**Live demo**](https://nexoshort.alvarocdev.com) ·
 [Deployment guide](DEPLOYMENT.md) ·
 [Architecture](docs/ARCHITECTURE.md) ·
 [Scope](docs/SCOPE.md)
@@ -50,6 +50,16 @@ production**: redirects on **nxo.li**, panel on
 - **Self-hostable** — a standard Laravel app; run the whole shortener on your own
   infrastructure.
 
+## Screenshots
+
+Captured from the live instance.
+
+| Light | Dark |
+| --- | --- |
+| <img src="docs/screenshots/home-light.png" alt="Nexo Short in light theme"> | <img src="docs/screenshots/home-dark.png" alt="Nexo Short in dark theme"> |
+
+See it for real at the [live demo](https://nexoshort.alvarocdev.com).
+
 ## Tech stack
 
 PHP 8.3+ · Laravel 13 · Blade + Alpine.js + Tailwind CSS (Vite) · MySQL
@@ -60,56 +70,16 @@ Nexo ID id_token verification with
 [Larastan](https://github.com/larastan/larastan) · GitHub Actions CI.
 Zero external runtime requests — system font stack, no CDNs.
 
-## Quick start (local)
-
-Requirements: Docker — everything else runs in containers via
-[Laravel Sail](https://laravel.com/docs/sail).
-
-```bash
-git clone https://github.com/nexo-tools/nexo-short.git
-cd nexo-short
-cp .env.example .env
-docker run --rm -v "$(pwd):/app" -w /app composer:latest composer install
-./vendor/bin/sail up -d
-./vendor/bin/sail artisan key:generate
-./vendor/bin/sail artisan migrate
-./vendor/bin/sail npm install && ./vendor/bin/sail npm run build
-```
-
-Open [http://localhost](http://localhost). Local email inbox (Mailpit):
-[http://localhost:8025](http://localhost:8025). Nexo Short serves two hosts — the short
-(redirect) host and the panel host; set `NEXO_SHORT_HOST` / `NEXO_PANEL_HOST` to map
-them (see [DEPLOYMENT.md](DEPLOYMENT.md)).
-
 ## Self-hosting
 
-Nexo Short is a standard Laravel app — run it on your own domain. See
-**[DEPLOYMENT.md](DEPLOYMENT.md)** for the full guide (short + panel hosts, SMTP,
-anti-abuse). Key configuration (see `.env.example`):
+A standard Laravel app: PHP 8.3+, MySQL, and anything from cheap shared hosting to a
+VPS. Multi-instance by design — short links on a domain *you* control, not a shared
+branded host. The redirect host and the panel host are separate by design, and both
+are covered in the guide.
 
-| Env var | Purpose | Default |
-| --- | --- | --- |
-| `NEXO_SHORT_HOST` | Domain that serves the redirects | `nxo.test` |
-| `NEXO_PANEL_HOST` | Domain that serves the landing, auth and panel | `nexoshort.test` |
-| `NEXO_AUTH_MODE` | `local` accounts or `sso` (Nexo ID only) | `local` |
-| `NEXO_ALLOW_REGISTRATION` | Allow local sign-ups | `true` |
-| `NEXO_SSO_ENABLED` | Enable the Nexo ID SSO client | `false` |
-| `NEXO_SAFE_BROWSING_KEY` | Google Safe Browsing API key (optional) | empty |
-| `NEXO_ATTRIBUTION_TEXT` | "Powered by" footer text | `Powered by alvarocdev.com` |
-| `NEXO_SUPPORT_EMAIL` | Contact address on the `/help` center | `hola@alvarocdev.com` |
-
-Slug length, creation / report rate limits and reserved slugs live in
-[`config/nexo.php`](config/nexo.php).
-
-## Status
-
-**Live (dark) in production.** Phases 1–3 (core shortener, cookieless click metrics,
-anti-abuse) plus the Nexo ID SSO client and the SEO landing are built and deployed —
-redirects on **nxo.li**, panel on
-**[nexoshort.alvarocdev.com](https://nexoshort.alvarocdev.com)** (currently dark:
-registration closed, SSO off). Gates 0–3 are signed and ADRs 001–008 accepted.
-Remaining: Gate 4 ops (uptime monitors, backup-restore test), then the Phase 5 launch
-(flip to SSO and open the source).
+**[DEPLOYMENT.md](DEPLOYMENT.md)** has the real steps: running it locally, the
+environment reference (attribution, Nexo ID SSO, Safe Browsing, rate limits) and the
+production deploy.
 
 ## Documentation
 
@@ -120,19 +90,18 @@ Remaining: Gate 4 ops (uptime monitors, backup-restore test), then the Phase 5 l
 
 ## Nexo ecosystem
 
-Nexo is a family of open-source, self-hostable tools that share one visual identity
-([nexo-brand](https://github.com/nexo-tools)), one optional account
-([Nexo ID](https://github.com/nexo-tools/nexo-id) SSO) and one set of engineering
-standards. Every tool runs **fully standalone** — the ecosystem is opt-in.
+Nexo is a family of open-source, self-hostable tools that share one visual identity,
+one optional account ([Nexo ID](https://github.com/nexo-tools/nexo-id) SSO) and one set of
+engineering standards. Every tool runs **fully standalone** — the ecosystem is opt-in.
 
-| Tool | What it is | Repo |
-| --- | --- | --- |
-| **Nexo Tools** | Ecosystem hub — discover the tools and hop between them with one account | [nexo-tools](https://github.com/nexo-tools/nexo-tools) |
-| **Nexo Links** | Link-in-bio you host yourself (Linktree alternative) | [nexo-links](https://github.com/nexo-tools/nexo-links) |
-| **Nexo Agenda** | Bookings for service businesses (AgendaPro / Fresha / Booksy alternative) | [nexo-agenda](https://github.com/nexo-tools/nexo-agenda) |
-| **Nexo Short** | Self-hosted URL shortener | — you are here |
-| **Nexo Events** | Event tickets and passes | [nexo-events](https://github.com/nexo-tools/nexo-events) |
-| **Nexo ID** | One account for every tool — OAuth 2.0 / OIDC SSO | [nexo-id](https://github.com/nexo-tools/nexo-id) |
+| Tool | What it is | Live | Repo |
+| --- | --- | --- | --- |
+| **Nexo Tools** | Ecosystem hub — discover the tools and hop between them with one account | [nexotools.alvarocdev.com](https://nexotools.alvarocdev.com) | [nexo-tools](https://github.com/nexo-tools/nexo-tools) |
+| **Nexo ID** | One account for every tool — OAuth 2.0 / OIDC SSO | [nexoid.alvarocdev.com](https://nexoid.alvarocdev.com) | [nexo-id](https://github.com/nexo-tools/nexo-id) |
+| **Nexo Links** | Link-in-bio you host yourself (Linktree alternative) | [nexolinks.alvarocdev.com](https://nexolinks.alvarocdev.com) | [nexo-links](https://github.com/nexo-tools/nexo-links) |
+| **Nexo Agenda** | Bookings for service businesses (Fresha / Booksy alternative) | [nexoagenda.alvarocdev.com](https://nexoagenda.alvarocdev.com) | [nexo-agenda](https://github.com/nexo-tools/nexo-agenda) |
+| **Nexo Short** | URL shortener with private, cookieless stats | [nexoshort.alvarocdev.com](https://nexoshort.alvarocdev.com) | — you are here |
+| **Nexo Events** | Event tickets, passes and QR check-in | [nexoevents.alvarocdev.com](https://nexoevents.alvarocdev.com) | [nexo-events](https://github.com/nexo-tools/nexo-events) |
 
 New to Nexo? Start at **[nexotools.alvarocdev.com](https://nexotools.alvarocdev.com)**.
 Built by **[alvarocdev.com](https://alvarocdev.com)** — the tech behind Nexo.
@@ -140,3 +109,8 @@ Built by **[alvarocdev.com](https://alvarocdev.com)** — the tech behind Nexo.
 ## License
 
 [MIT](LICENSE) © [Alvaro Carrizales](https://alvarocdev.com) — the tech behind Nexo.
+
+---
+
+Status: **live** — redirects on [nxo.li](https://nxo.li), panel at
+[nexoshort.alvarocdev.com](https://nexoshort.alvarocdev.com), signing in through Nexo ID.
