@@ -20,27 +20,10 @@
     ];
 @endphp
 
-<x-panel-layout :title="__('Short links on your own domain')">
-    <x-slot:head>
-        <meta name="description" content="{{ $description }}">
-        <link rel="canonical" href="{{ $home }}">
-
-        @foreach (['en', 'es', 'pt'] as $locale)
-            <link rel="alternate" hreflang="{{ $locale }}" href="{{ $home.'?lang='.$locale }}">
-        @endforeach
-        <link rel="alternate" hreflang="x-default" href="{{ $home }}">
-
-        <meta property="og:type" content="website">
-        <meta property="og:site_name" content="{{ config('app.name') }}">
-        <meta property="og:title" content="{{ config('app.name') }} — {{ __('Short links on your own domain') }}">
-        <meta property="og:description" content="{{ $description }}">
-        <meta property="og:url" content="{{ $home }}">
-        <meta property="og:image" content="{{ url('/og-image.png') }}">
-        <meta name="twitter:card" content="summary_large_image">
-
-        <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
-    </x-slot:head>
-
+{{-- The head is the shared x-nexo-seo component (via panel-layout → partials/head);
+     only the structured data is page-specific — the landing describes the software
+     itself, not a generic WebSite. --}}
+<x-panel-layout :title="__('Short links on your own domain')" :description="$description" :seo-json-ld="$jsonLd">
     <x-slot:actions>
         @auth
             <a href="{{ route('panel') }}" class="nexo-btn nexo-btn--ghost">{{ __('Your links') }}</a>
@@ -70,10 +53,10 @@
             @endforeach
         </section>
 
-        <nav class="mt-16 flex justify-center gap-6 text-sm text-muted" aria-label="Legal">
+        <nav class="mt-16 flex justify-center gap-6 text-sm text-muted" aria-label="{{ __('Legal pages') }}">
             <a href="{{ route('help') }}" class="hover:text-ink">{{ __('nexo.help.title') }}</a>
-            <a href="{{ route('privacy') }}" class="hover:text-ink">{{ __('Privacy') }}</a>
-            <a href="{{ route('terms') }}" class="hover:text-ink">{{ __('Terms') }}</a>
+            <a href="{{ route('legal.privacy') }}" class="hover:text-ink">{{ __('Privacy') }}</a>
+            <a href="{{ route('legal.terms') }}" class="hover:text-ink">{{ __('Terms') }}</a>
         </nav>
     </div>
 </x-panel-layout>

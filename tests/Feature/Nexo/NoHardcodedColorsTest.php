@@ -11,12 +11,13 @@ it('has no hardcoded hex colors in blade views or app css (use --nexo-* tokens)'
 
     // Filenames allowed to contain literal hex:
     //  - the generated brand tokens and the shared chrome layer;
-    //  - head.blade.php (the PWA <meta name="theme-color"> can't reference a CSS var);
-    //  - the short-host shells (layout.blade.php = report, errors/404.blade.php).
-    //    These are deliberately isolated from the panel bundle — they never load the
-    //    token stylesheet (ADR-001 cookieless short host), so they self-contain their
-    //    minimal dark styles. All PANEL surfaces must still use var(--nexo-*).
-    $allowed = ['nexo-tokens.css', 'nexo-ui.css', 'head.blade.php', 'layout.blade.php', '404.blade.php'];
+    //  - nexo-seo.blade.php (the PWA <meta name="theme-color"> can't reference a CSS var);
+    //  - the two short-host shells (layout = report form, short-error-layout = 404 and
+    //    any other short-host error). These are deliberately isolated from the panel
+    //    bundle — they never load the token stylesheet (ADR-001 cookieless short host),
+    //    so they self-contain their minimal dark styles, in the brand violet. All
+    //    PANEL surfaces, error pages included, must still use var(--nexo-*).
+    $allowed = ['nexo-tokens.css', 'nexo-ui.css', 'nexo-seo.blade.php', 'layout.blade.php', 'short-error-layout.blade.php'];
 
     $offenders = [];
     foreach ($roots as $root) {

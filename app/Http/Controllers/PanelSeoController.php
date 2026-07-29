@@ -15,8 +15,8 @@ class PanelSeoController extends Controller
     /** @var list<string> */
     private const LOCALES = ['en', 'es', 'pt'];
 
-    /** @var list<string> */
-    private const PAGES = ['landing', 'privacy', 'terms'];
+    /** Route names of the indexable panel pages. */
+    private const PAGES = ['landing', 'legal.privacy', 'legal.terms'];
 
     public function robots(): Response
     {

@@ -26,6 +26,23 @@ it('keeps the short-host 404 free of panel chrome and theme-init', function () u
     }
 });
 
+it('keeps every OTHER short-host error page chrome-free too, not just the 404', function () use ($chromeMarkers) {
+    // The report form is the one short-host surface a user can rate-limit, so a
+    // 429 renders errors/429 ON the cookieless domain. Every error view shares
+    // components/error-layout, which is where the host branch lives — without it
+    // the panel shell (chrome + theme-init + Vite bundle) leaks onto nxo.li.
+    config()->set('nexo.report_rate.per_ip', 1);
+
+    $payload = ['slug' => 'abc123', 'reason' => 'spam'];
+    $this->post(shortUrl('/report'), $payload)->assertOk();
+
+    $html = $this->post(shortUrl('/report'), $payload)->assertStatus(429)->getContent();
+
+    foreach ($chromeMarkers as $marker) {
+        expect($html)->not->toContain($marker);
+    }
+});
+
 it('keeps chrome off the redirect itself (no body leak)', function () {
     Link::factory()->for(User::factory())->create(['slug' => 'iso1', 'is_active' => true, 'target_url' => 'https://example.com']);
 

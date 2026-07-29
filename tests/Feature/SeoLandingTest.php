@@ -40,8 +40,8 @@ it('AC-45: the sitemap lists the public pages with language alternates', functio
     expect($xml)
         ->toContain('<urlset')
         ->toContain(route('landing'))
-        ->toContain(route('privacy'))
-        ->toContain(route('terms'))
+        ->toContain(route('legal.privacy'))
+        ->toContain(route('legal.terms'))
         ->toContain('hreflang="pt"');
 
     // Well-formed XML.

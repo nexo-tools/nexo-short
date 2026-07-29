@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PanelSeoController;
 use App\Http\Middleware\EnsureLocalAuth;
@@ -18,8 +19,14 @@ Route::get('sitemap.xml', [PanelSeoController::class, 'sitemap']);
 // host lives in routes/short.php. All panel routes negotiate locale (setlocale).
 Route::middleware('setlocale')->group(function () {
     Route::get('/', fn () => view('welcome'))->name('landing');
-    Route::get('privacy', fn () => view('privacy'))->name('privacy');
-    Route::get('terms', fn () => view('terms'))->name('terms');
+
+    // Legal pages (nexo-ui standard): Spanish-first URLs, ecosystem-wide route
+    // names. The old English paths were live and are in the published sitemap,
+    // so they 301 instead of breaking.
+    Route::get('privacidad', [LegalController::class, 'privacy'])->name('legal.privacy');
+    Route::get('terminos', [LegalController::class, 'terms'])->name('legal.terms');
+    Route::permanentRedirect('privacy', 'privacidad');
+    Route::permanentRedirect('terms', 'terminos');
 
     // Help center (nexo-ui). Panel host only, before any catch-all (there is none
     // on this host; the short-host {slug} catch-all lives in routes/short.php).

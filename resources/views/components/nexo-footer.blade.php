@@ -23,4 +23,9 @@
     <a href="{{ $eco['github_org_url'] ?? 'https://github.com/nexo-tools' }}" rel="noopener">
         {{ __('nexo.footer.source') }}
     </a>
+
+    {{-- Local addition to the shared component: the legal pages have to be
+         reachable from every panel page (the short host renders no footer). --}}
+    <a href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
+    <a href="{{ route('legal.terms') }}">{{ __('Terms') }}</a>
 </footer>

@@ -143,6 +143,8 @@ return [
         'logout', 'panel', 'privacy', 'register', 'report', 'reports', 'robots',
         'settings', 'setup', 'status', 'storage', 'support', 'system', 'terms',
         'up', 'verify', 'www',
+        // The legal pages live on Spanish-first paths; both spellings are held.
+        'privacidad', 'terminos',
         // Nexo ecosystem tool names.
         'nexo', 'nexoshort', 'short', 'links', 'agenda', 'events', 'id',
     ],

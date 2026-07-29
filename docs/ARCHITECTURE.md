@@ -33,7 +33,7 @@ runs the cookieless `short` middleware group); the panel answers every other hos
 | panel | `POST /links`, `PATCH /links/{link}/deactivate` | LinkController@store / @deactivate |
 | panel | `POST /links` | LinkController@store — `throttle:link-creation` (per user + IP) |
 | panel | `GET /links/{link}/stats` | LinkController@stats (owner-only) |
-| panel | `GET /privacy`, `GET /terms` | privacy (ADR-006) + terms of use (ADR-005 §8) |
+| panel | `GET /privacidad`, `GET /terminos` | [LegalController](../app/Http/Controllers/LegalController.php) — privacy (ADR-006) + terms of use (ADR-005 §8), content in `lang/<locale>/legal.php`. The old `/privacy` and `/terms` 301 here |
 | panel | `GET /auth/nexo/redirect`, `GET /auth/nexo/callback` | Nexo ID SSO (only when `NEXO_SSO_ENABLED`; [NexoSsoController](../app/Http/Controllers/Auth/NexoSsoController.php)) |
 
 ## Layers

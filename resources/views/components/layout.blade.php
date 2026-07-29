@@ -1,3 +1,8 @@
+{{-- Self-contained shell for the SHORT host (ADR-001): the report form lives on
+     the cookieless domain, which loads no panel chrome, no token stylesheet and no
+     Vite build, so it inlines its minimal dark styles. The literal hex below is
+     deliberate and allow-listed in NoHardcodedColorsTest; the accent is the Nexo
+     violet (--nexo-violet-600/700/300) so the isolation does not cost the brand. --}}
 @props(['title' => null])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -16,7 +21,7 @@
         }
         main { width: 100%; max-width: 34rem; margin: auto 0; }
         h1 { font-size: 1.6rem; margin: 0 0 1.25rem; }
-        a { color: #a5b4fc; }
+        a { color: #c4b5fd; }
         form { display: flex; flex-direction: column; gap: .9rem; }
         label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; color: #d4d4d4; }
         input, textarea, select {
@@ -25,9 +30,9 @@
         }
         button {
             padding: .65rem 1rem; border: 0; border-radius: .5rem; cursor: pointer;
-            background: #6366f1; color: #fff; font-size: 1rem; font-weight: 600;
+            background: #7c3aed; color: #fff; font-size: 1rem; font-weight: 600;
         }
-        button:hover { background: #4f46e5; }
+        button:hover { background: #6d28d9; }
         .muted { color: #a3a3a3; font-size: .9rem; }
         .errors { color: #fca5a5; font-size: .9rem; margin: 0 0 1rem; padding-left: 1.1rem; }
         .row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }

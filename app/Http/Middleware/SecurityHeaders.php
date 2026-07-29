@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\ShortHost;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +63,7 @@ class SecurityHeaders
         $style = "'self' 'unsafe-inline'";
         $connect = "'self'";
 
-        if (! $this->isShortHost($request)) {
+        if (! ShortHost::matches($request)) {
             $script .= " 'unsafe-eval' 'sha256-QY4re+NFw+ChK0c8H/EaTpktoUisSWU0fL7V6J43umM='";
             // Panel host only: permit the Nexo Tools hub so the opt-in cookieless
             // pageview beacon (navigator.sendBeacon) is not blocked. It only fires
@@ -90,20 +91,6 @@ class SecurityHeaders
             "style-src {$style}",
             "connect-src {$connect}",
         ]);
-    }
-
-    /** The cookieless short host (apex or www) — kept on the tightest script-src. */
-    private function isShortHost(Request $request): bool
-    {
-        $short = (string) config('nexo.short_host');
-
-        if ($short === '') {
-            return false;
-        }
-
-        $host = $request->getHost();
-
-        return $host === $short || $host === 'www.'.$short;
     }
 
     private function viteDevServer(): ?string
