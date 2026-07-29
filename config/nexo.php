@@ -39,7 +39,7 @@ return [
         'enabled' => env('NEXO_ATTRIBUTION_ENABLED', true),
         // `text` drives the minimal short-host attribution (x-attribution); `label`
         // is the canonical ecosystem powered-by shown in the panel's nexo-footer.
-        'text' => env('NEXO_ATTRIBUTION_TEXT', 'Powered by alvarocdev.com'),
+        'text' => env('NEXO_ATTRIBUTION_TEXT', 'made with Nexo Short'),
         'label' => env('NEXO_ATTRIBUTION_LABEL', 'made with Nexo Short'),
         'url' => env('NEXO_ATTRIBUTION_URL'),
     ],

@@ -1,11 +1,23 @@
 # Nexo Short
 
 > Entry point for any AI/agent working on this project. It follows Alvaro's standards system (repo `alvaro`, alvarocdev.com). Keep this file updated: persist here the important context that comes up during work sessions.
-> This repo will be public: no secrets, credentials, or sensitive infrastructure details here.
+> This repo is **public**: no secrets, credentials, or sensitive infrastructure details here.
 
 ## What this project is
 
-Open source URL shortener of the Nexo ecosystem (Nexo Links, Nexo Agenda, Nexo ID, upcoming Nexo Events): short links on a dedicated short domain, cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on **nxo.li** (redirects ONLY — reputational fuse), panel/landing on **nexoshort.alvarocdev.com**. **Current state: LIVE (dark) in production (2026-07-22).** Phases 1–3 (core shortener + click metrics + ADR-005 anti-abuse) + Nexo ID SSO client (5.1) + SSO-only auth mode (5.2) + SEO landing/brand (5.3) + open-source audit (5.4a). Deployed to Hostinger + Cloudflare: redirects on **nxo.li**, panel on **nexoshort.alvarocdev.com**, **DARK** — the instance runs LOCAL auth (`NEXO_AUTH_MODE=local`, `NEXO_SSO_ENABLED=false`) with registration closed; SSO is code-complete + verified against nexo-id but stays OFF until launch. 121 tests, CI green; ADRs 001–008 Accepted; **Gates 0–3 done; Gate 4 ops pending** (add `/up`+canary to UptimeRobot with alerting + one real backup-restore); production audit clean (2 short-host leaks fixed). Login flips to SSO-only at launch (`NEXO_AUTH_MODE=sso` + `NEXO_SSO_ENABLED=true`); the flow is verified (`/auth/nexo/redirect` → nexoid authorize w/ correct client + panel-host callback + PKCE). **Remaining for launch (Gate 5): finish Gate 4 ops; nexo-id runs its Gate 3 e2e (real login round-trip); `audit-open-source` (done, clean) → repo public + flip SSO on.** *(Header reconciled 2026-07-23 to match §Production / DEPLOYMENT / README / .env.production, per ecosystem-audit — it had overstated SSO as live and Gate 4 as done.)* Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Open source URL shortener of the Nexo ecosystem: short links on a dedicated short domain,
+cookieless click metrics, privacy by design, self-hostable. Alvaro's hosted instance: redirects on
+**nxo.li** (redirects ONLY — reputational fuse; its root 404s by design, so it is never linked as
+the "live" URL), panel and landing on **nexoshort.alvarocdev.com**.
+
+**Current state: LIVE and launched.** The instance runs **SSO-only** against Nexo ID
+(`NEXO_AUTH_MODE=sso`, `NEXO_SSO_ENABLED=true`) with silent SSO and central logout, and the repo is
+public. Phases 1–5 are done: core shortener, click metrics, ADR-005 anti-abuse, the Nexo ID client,
+the SEO landing, the open-source audit, and the ecosystem brand/chrome standard. ADRs 001–008
+Accepted. **Still open (owner/ops, not blocking):** Gate 4 — add `/up` and the `nxo.li/hb` canary to
+UptimeRobot with alerting, and rehearse one real backup restore.
+
+Start at [docs/PLAN.md](docs/PLAN.md); architecture map in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Stack
 
@@ -25,7 +37,7 @@ Docker only (no local PHP). The shared `dev-environment` must be up (`cd ~/dev-e
 
 ## Production
 
-**Deployed (dark) 2026-07-22** via [DEPLOYMENT.md](DEPLOYMENT.md). Layout (mirrors the siblings): app at `~/domains/alvarocdev.com/nexo-short/`; panel `nexoshort.alvarocdev.com` = subdomain, docroot symlinked to `nexo-short/public`; **nxo.li** = separate site on the same plan (`~/domains/nxo.li/public_html` symlinked to the same `nexo-short/public` — cross-domain symlink works here). DB `u827592577_nexoshort` (host `localhost`, not `127.0.0.1` — the grant is `@localhost`). PHP 8.4+ per site (nxo.li defaulted low → bumped). No Vite build needed (inline styles). `route:cache` NOT usable (closure routes) — `config:cache` + `view:cache` only. Cloudflare fronts **nxo.li only** (proxied, SSL **Full**, IP Geolocation on, `TRUSTED_PROXIES=*`); panel is served directly by Hostinger (`hcdn`). Cloudflare "Managed robots.txt" must stay **off** (it pollutes the short host's `Disallow: /`). Redirect TTFB ~110 ms (ADR-002 trigger not met). Canary link `nxo.li/hb → 302`. **Not launched (dark):** registration closed, SSO off. Remaining Gate 4: add `/up` + `nxo.li/hb` to UptimeRobot with alerting, test a backup restore once.
+**Deployed 2026-07-22, launched since** via [DEPLOYMENT.md](DEPLOYMENT.md). Layout (mirrors the siblings): app at `~/domains/alvarocdev.com/nexo-short/`; panel `nexoshort.alvarocdev.com` = subdomain, docroot symlinked to `nexo-short/public`; **nxo.li** = separate site on the same plan (`~/domains/nxo.li/public_html` symlinked to the same `nexo-short/public` — cross-domain symlink works here). DB `u827592577_nexoshort` (host `localhost`, not `127.0.0.1` — the grant is `@localhost`). PHP 8.4+ per site (nxo.li defaulted low → bumped). No Vite build needed (inline styles). `route:cache` NOT usable (closure routes) — `config:cache` + `view:cache` only. Cloudflare fronts **nxo.li only** (proxied, SSL **Full**, IP Geolocation on, `TRUSTED_PROXIES=*`); panel is served directly by Hostinger (`hcdn`). Cloudflare "Managed robots.txt" must stay **off** (it pollutes the short host's `Disallow: /`). Redirect TTFB ~110 ms (ADR-002 trigger not met). Canary link `nxo.li/hb → 302`. **Launched:** SSO-only login against Nexo ID, repo public. Remaining Gate 4: add `/up` + `nxo.li/hb` to UptimeRobot with alerting, test a backup restore once.
 
 ## Project conventions
 

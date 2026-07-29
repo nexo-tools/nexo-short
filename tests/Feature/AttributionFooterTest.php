@@ -23,3 +23,19 @@ it('AC-20: hides the attribution footer when disabled', function () {
 
     $this->get(shortUrl('/report'))->assertDontSee('Powered by alvarocdev.com');
 });
+
+it('AC-20: falls back to the product, never the upstream author, when unconfigured', function () {
+    // A third-party instance that configures nothing must not end up running an
+    // ad for alvarocdev.com (add-branding-footer: open-source multi-instance
+    // products carry a neutral product default).
+    config([
+        'nexo.attribution.enabled' => true,
+        'nexo.attribution.text' => null,
+        'nexo.attribution.url' => null,
+    ]);
+
+    $html = $this->get(shortUrl('/report'))->assertOk()->getContent();
+
+    expect(str_contains($html, 'made with Nexo Short'))->toBeTrue('The short host does not credit the product.');
+    expect(str_contains($html, 'alvarocdev.com'))->toBeFalse('The short host is advertising the upstream author.');
+});
