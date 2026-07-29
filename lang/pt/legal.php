@@ -13,6 +13,13 @@
 return [
     'updated' => 'Última atualização: 28 de julho de 2026',
 
+    // Rendered only when NEXO_LEGAL_OPERATOR / NEXO_LEGAL_CONTACT are set.
+    'operator' => [
+        'h' => 'Quem opera esta instância',
+        'p' => 'Esta instância é operada por :operator.',
+        'contact' => 'Para qualquer questão sobre seus dados, escreva para :contact.',
+    ],
+
     'privacy' => [
         'title' => 'Privacidade',
         'intro' => 'Esta instância do Nexo Short é open source e auto-hospedável. É um encurtador de links: recolhe o mínimo para que um link curto funcione e para que quem o criou veja quantos cliques teve. O domínio curto não usa cookies, não há rastreadores de terceiros e endereços IP nunca são guardados em bruto.',

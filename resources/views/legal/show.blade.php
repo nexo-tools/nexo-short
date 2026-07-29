@@ -14,6 +14,18 @@
             </section>
         @endforeach
 
+        {{-- Who runs THIS instance. From env so a self-hoster does not publish
+             the upstream author's details. --}}
+        @if ($operator || $contact)
+            <section class="mt-8">
+                <h2 class="text-lg font-semibold text-ink">{{ __('legal.operator.h') }}</h2>
+                <p class="mt-2 leading-relaxed text-muted">
+                    @if ($operator){{ __('legal.operator.p', ['operator' => $operator]) }} @endif
+                    @if ($contact){{ __('legal.operator.contact', ['contact' => $contact]) }}@endif
+                </p>
+            </section>
+        @endif
+
         {{-- The label is "Legal pages" and not the bare word: as a translation key,
              that word collides with lang/<locale>/legal.php on case-insensitive
              filesystems and resolves to the whole array instead of a string. --}}

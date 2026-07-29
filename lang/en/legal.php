@@ -13,6 +13,13 @@
 return [
     'updated' => 'Last updated: 28 July 2026',
 
+    // Rendered only when NEXO_LEGAL_OPERATOR / NEXO_LEGAL_CONTACT are set.
+    'operator' => [
+        'h' => 'Who runs this instance',
+        'p' => 'This instance is run by :operator.',
+        'contact' => 'For anything about your data you can write to :contact.',
+    ],
+
     'privacy' => [
         'title' => 'Privacy',
         'intro' => 'This instance of Nexo Short is open source and self-hostable. It is a URL shortener: it collects the minimum needed for a short link to work and for whoever created it to see how many clicks it got. The short domain sets no cookies, there are no third-party trackers, and raw IP addresses are never stored.',

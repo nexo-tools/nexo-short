@@ -13,6 +13,13 @@
 return [
     'updated' => 'Última actualización: 28 de julio de 2026',
 
+    // Rendered only when NEXO_LEGAL_OPERATOR / NEXO_LEGAL_CONTACT are set.
+    'operator' => [
+        'h' => 'Quién opera esta instancia',
+        'p' => 'Esta instancia la opera :operator.',
+        'contact' => 'Para cualquier consulta sobre tus datos podés escribir a :contact.',
+    ],
+
     'privacy' => [
         'title' => 'Privacidad',
         'intro' => 'Esta instancia de Nexo Short es open source y autoalojable. Es un acortador de enlaces: recoge lo mínimo para que un enlace corto funcione y para que quien lo creó vea cuántos clics tuvo. El dominio corto no pone cookies, no hay rastreadores de terceros y nunca se guardan direcciones IP en crudo.',

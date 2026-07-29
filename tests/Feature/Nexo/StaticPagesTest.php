@@ -86,3 +86,17 @@ it('links the legal pages from the footer and lists them in the sitemap', functi
     expect($sitemap)->toContain(route('legal.privacy'))
         ->and($sitemap)->toContain(route('legal.terms'));
 });
+
+it('names the instance operator on the legal pages when configured', function () {
+    // The env-driven operator/contact contract (templates/nexo-ui/pages): with
+    // the values set, the pages must say who answers for this instance — this
+    // tool shipped its legal pages without the section and nobody noticed,
+    // because nothing asserted it.
+    config()->set('nexo.legal.operator', 'Example Operator');
+    config()->set('nexo.legal.contact', 'legal@example.test');
+
+    $html = $this->get(route('legal.privacy'))->assertOk()->getContent();
+
+    expect(str_contains($html, 'Example Operator'))->toBeTrue('The operator section did not render.');
+    expect(str_contains($html, 'legal@example.test'))->toBeTrue('The contact did not render.');
+});
