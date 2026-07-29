@@ -1,15 +1,19 @@
 @php
     $home = url('/');
     $description = __('Open source URL shortener: short links on your own domain, cookieless click metrics, privacy by design, self-hostable.');
+    // Blade compiles `@context` as a directive (Laravel 11 added one), so the
+    // sigil is kept out of the template text — otherwise this array ships as
+    // compiled PHP instead of JSON.
+    $at = '@';
     $jsonLd = [
-        '@context' => 'https://schema.org',
-        '@type' => 'SoftwareApplication',
+        $at.'context' => 'https://schema.org',
+        $at.'type' => 'SoftwareApplication',
         'name' => config('app.name'),
         'applicationCategory' => 'DeveloperApplication',
         'operatingSystem' => 'Web',
         'url' => $home,
         'description' => $description,
-        'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'],
+        'offers' => [$at.'type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'],
         'license' => 'https://opensource.org/licenses/MIT',
     ];
     $features = [
