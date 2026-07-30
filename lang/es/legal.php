@@ -85,7 +85,7 @@ return [
             ],
             [
                 'h' => 'Tu cuenta',
-                'p' => 'Hace falta una cuenta para crear enlaces. Sos responsable de los enlaces creados desde ella y de mantener tu contraseña a salvo. El registro puede estar cerrado en esta instancia; eso no impide que los enlaces ya creados sigan funcionando.',
+                'p' => 'Hace falta una cuenta para crear enlaces. Eres responsable de los enlaces creados desde ella y de mantener tu contraseña a salvo. El registro puede estar cerrado en esta instancia; eso no impide que los enlaces ya creados sigan funcionando.',
             ],
             [
                 'h' => 'Los enlaces cortos son públicos por naturaleza',
