@@ -17,7 +17,7 @@ return [
     'operator' => [
         'h' => 'Quién opera esta instancia',
         'p' => 'Esta instancia la opera :operator.',
-        'contact' => 'Para cualquier consulta sobre tus datos podés escribir a :contact.',
+        'contact' => 'Para cualquier consulta sobre tus datos puedes escribir a :contact.',
     ],
 
     'privacy' => [
@@ -26,7 +26,7 @@ return [
         'sections' => [
             [
                 'h' => 'Qué guardamos de tu cuenta',
-                'p' => 'Tu nombre, tu email y una versión cifrada (hash) de la contraseña. Hace falta una cuenta para crear enlaces; el registro puede estar abierto o cerrado según la instancia. Si entrás con Nexo ID, guardamos además el identificador que ese servicio nos devuelve para reconocerte, y tu contraseña no pasa nunca por aquí.',
+                'p' => 'Tu nombre, tu email y una versión cifrada (hash) de la contraseña. Hace falta una cuenta para crear enlaces; el registro puede estar abierto o cerrado según la instancia. Si entras con Nexo ID, guardamos además el identificador que ese servicio nos devuelve para reconocerte, y tu contraseña no pasa nunca por aquí.',
             ],
             [
                 'h' => 'Qué guardamos de tus enlaces',
@@ -66,7 +66,7 @@ return [
             ],
             [
                 'h' => 'Tus derechos',
-                'p' => 'Podés pedir acceso a tus datos, su corrección o su borrado escribiendo a quien opera esta instancia (el contacto está en la página de ayuda).',
+                'p' => 'Puedes pedir acceso a tus datos, su corrección o su borrado escribiendo a quien opera esta instancia (el contacto está en la página de ayuda).',
             ],
             [
                 'h' => 'Otras instancias',
@@ -77,7 +77,7 @@ return [
 
     'terms' => [
         'title' => 'Términos de uso',
-        'intro' => 'Al usar esta instancia de Nexo Short aceptás lo que sigue. Es un servicio gratuito, ofrecido tal cual está.',
+        'intro' => 'Al usar esta instancia de Nexo Short aceptas lo que sigue. Es un servicio gratuito, ofrecido tal cual está.',
         'sections' => [
             [
                 'h' => 'Qué es el servicio',
@@ -101,7 +101,7 @@ return [
             ],
             [
                 'h' => 'Disponibilidad',
-                'p' => 'El servicio se ofrece sin garantías de disponibilidad. Un enlace corto puede dejar de funcionar, y el servicio puede cambiar o discontinuarse. Si un enlace es importante para vos, guardá también su destino original.',
+                'p' => 'El servicio se ofrece sin garantías de disponibilidad. Un enlace corto puede dejar de funcionar, y el servicio puede cambiar o discontinuarse. Si un enlace es importante para ti, guarda también su destino original.',
             ],
             [
                 'h' => 'Límite de responsabilidad',
@@ -109,7 +109,7 @@ return [
             ],
             [
                 'h' => 'Software libre',
-                'p' => 'Nexo Short se distribuye con licencia MIT: podés leer el código, modificarlo y alojar tu propia instancia. El software se entrega sin garantías, según indica esa licencia.',
+                'p' => 'Nexo Short se distribuye con licencia MIT: puedes leer el código, modificarlo y alojar tu propia instancia. El software se entrega sin garantías, según indica esa licencia.',
             ],
             [
                 'h' => 'Cambios',
