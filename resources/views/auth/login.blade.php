@@ -13,7 +13,7 @@
 
             {{-- Local credentials: hidden on an SSO-only instance (ADR-003 §4). --}}
             @if (config('nexo.auth_mode') !== 'sso')
-                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4">
+                <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4" x-data="{ sending: false }" @submit="sending = true">
                     @csrf
                     <div>
                         <label for="email" class="block text-sm font-medium text-muted">{{ __('Email') }}</label>
@@ -36,7 +36,7 @@
                     <label class="flex items-center gap-2 text-sm text-muted">
                         <input type="checkbox" name="remember" class="rounded border-control text-primary focus:ring-2 focus:ring-ring"> {{ __('Remember me') }}
                     </label>
-                    <button type="submit" class="nexo-btn nexo-btn--primary w-full">{{ __('Sign in') }}</button>
+                    <button type="submit" class="nexo-btn nexo-btn--primary w-full" :disabled="sending" :aria-busy="sending">{{ __('Sign in') }}</button>
                 </form>
             @endif
 

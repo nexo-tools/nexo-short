@@ -21,7 +21,7 @@
             </ul>
         @endif
 
-        <form method="POST" action="{{ route('links.store') }}" class="mt-6 space-y-4 rounded-2xl border border-line bg-surface-raised p-5 sm:p-6">
+        <form method="POST" action="{{ route('links.store') }}" class="mt-6 space-y-4 rounded-2xl border border-line bg-surface-raised p-5 sm:p-6" x-data="{ sending: false }" @submit="sending = true">
             @csrf
             <h2 class="text-base font-semibold text-ink">{{ __('Create a short link') }}</h2>
             <div>
@@ -42,7 +42,7 @@
                     <p id="custom_slug-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
                 @enderror
             </div>
-            <button type="submit" class="nexo-btn nexo-btn--primary">{{ __('Create') }}</button>
+            <button type="submit" class="nexo-btn nexo-btn--primary" :disabled="sending" :aria-busy="sending">{{ __('Create') }}</button>
         </form>
 
         @if ($links->isEmpty())

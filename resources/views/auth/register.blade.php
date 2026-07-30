@@ -11,7 +11,7 @@
                 </ul>
             @endif
 
-            <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-4">
+            <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-4" x-data="{ sending: false }" @submit="sending = true">
                 @csrf
                 <div>
                     <label for="name" class="block text-sm font-medium text-muted">{{ __('Name') }}</label>
@@ -49,7 +49,7 @@
                         <p id="password_confirmation-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-                <button type="submit" class="nexo-btn nexo-btn--primary w-full">{{ __('Create an account') }}</button>
+                <button type="submit" class="nexo-btn nexo-btn--primary w-full" :disabled="sending" :aria-busy="sending">{{ __('Create an account') }}</button>
             </form>
 
             <p class="mt-6 text-sm text-muted">
