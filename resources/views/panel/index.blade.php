@@ -10,7 +10,7 @@
         <h1 class="text-2xl font-semibold text-ink">{{ __('Your links') }}</h1>
 
         @if (session('status'))
-            <p role="status" class="mt-4 inline-block rounded-md bg-success-subtle px-3 py-1.5 text-sm font-medium text-success-subtle-fg">{{ session('status') }}</p>
+            <p role="status" class="nexo-flash mt-4">{{ session('status') }}</p>
         @endif
 
         @if ($errors->any())
