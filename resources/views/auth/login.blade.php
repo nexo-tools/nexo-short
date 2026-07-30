@@ -1,7 +1,7 @@
-<x-panel-layout :title="__('Sign in')">
+<x-panel-layout :title="__('Sign in to your account')">
     <div class="mx-auto flex w-full max-w-md flex-col justify-center px-4 py-10 sm:py-16">
         <div class="rounded-2xl border border-line bg-surface-raised p-6 shadow-sm sm:p-8">
-            <h1 class="text-2xl font-semibold text-ink">{{ __('Sign in') }}</h1>
+            <h1 class="text-2xl font-semibold text-ink">{{ __('Sign in to your account') }}</h1>
 
             @if ($errors->any())
                 <ul role="alert" class="mt-4 list-disc space-y-1 rounded-md bg-danger-subtle py-3 pl-8 pr-3 text-sm text-danger-subtle-fg">
