@@ -3,6 +3,8 @@
      i18n: nexo.footer.* --}}
 @php
     $eco = config('nexo-ecosystem', []);
+    // Neutral product default: an instance somebody else deploys must not
+    // advertise the upstream author (add-branding-footer, multi-instance rule).
     $attrLabel = config('nexo.attribution.label') ?: 'made with Nexo Short';
     $attrUrl = config('nexo.attribution.url') ?: ($eco['github_org_url'] ?? 'https://github.com/nexo-tools');
 @endphp
@@ -16,6 +18,8 @@
 
     <span class="nexo-footer__spacer"></span>
 
+    {{-- The label is the whole phrase ("powered by example.com"): prepend
+         nothing here, or the footer reads "Made by powered by example.com". --}}
     <span>
         <a href="{{ $attrUrl }}" rel="noopener">{{ $attrLabel }}</a>
     </span>
@@ -24,8 +28,8 @@
         {{ __('nexo.footer.source') }}
     </a>
 
-    {{-- Local addition to the shared component: the legal pages have to be
-         reachable from every panel page (the short host renders no footer). --}}
-    <a href="{{ route('legal.privacy') }}">{{ __('Privacy') }}</a>
-    <a href="{{ route('legal.terms') }}">{{ __('Terms') }}</a>
+    {{-- Legal pages must be reachable from every page (STANDARD.md). Routes
+         come from pages/legal/routes-snippet.php. --}}
+    <a href="{{ route('legal.privacy') }}">{{ __('nexo.footer.privacy') }}</a>
+    <a href="{{ route('legal.terms') }}">{{ __('nexo.footer.terms') }}</a>
 </footer>
