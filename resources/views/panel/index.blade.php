@@ -10,11 +10,11 @@
         <h1 class="text-2xl font-semibold text-ink">{{ __('Your links') }}</h1>
 
         @if (session('status'))
-            <p class="mt-4 inline-block rounded-md bg-success-subtle px-3 py-1.5 text-sm font-medium text-success-subtle-fg">{{ session('status') }}</p>
+            <p role="status" class="mt-4 inline-block rounded-md bg-success-subtle px-3 py-1.5 text-sm font-medium text-success-subtle-fg">{{ session('status') }}</p>
         @endif
 
         @if ($errors->any())
-            <ul class="mt-4 list-disc space-y-1 rounded-md bg-danger-subtle py-3 pl-8 pr-3 text-sm text-danger-subtle-fg">
+            <ul role="alert" class="mt-4 list-disc space-y-1 rounded-md bg-danger-subtle py-3 pl-8 pr-3 text-sm text-danger-subtle-fg">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -27,12 +27,20 @@
             <div>
                 <label for="target_url" class="block text-sm font-medium text-muted">{{ __('Destination URL') }}</label>
                 <input id="target_url" type="url" name="target_url" value="{{ old('target_url') }}" placeholder="https://…" required
-                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                       @error('target_url') aria-invalid="true" aria-describedby="target_url-error" @enderror
+                       class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                @error('target_url')
+                    <p id="target_url-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label for="custom_slug" class="block text-sm font-medium text-muted">{{ __('Custom slug (optional)') }}</label>
                 <input id="custom_slug" type="text" name="custom_slug" value="{{ old('custom_slug') }}" placeholder="my-link"
-                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                       @error('custom_slug') aria-invalid="true" aria-describedby="custom_slug-error" @enderror
+                       class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                @error('custom_slug')
+                    <p id="custom_slug-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                @enderror
             </div>
             <button type="submit" class="nexo-btn nexo-btn--primary">{{ __('Create') }}</button>
         </form>
