@@ -46,7 +46,10 @@
         </form>
 
         @if ($links->isEmpty())
-            <p class="mt-8 text-muted">{{ __('No links yet.') }}</p>
+            <div class="mt-8 rounded-2xl border border-dashed border-line px-6 py-10 text-center">
+                <p class="font-medium text-ink">{{ __('No links yet.') }}</p>
+                <p class="mx-auto mt-2 max-w-sm text-sm text-muted">{{ __('Paste a destination URL in the form above and you will get a short link you can share right away.') }}</p>
+            </div>
         @else
             <div class="mt-8 overflow-x-auto rounded-2xl border border-line">
                 <table class="w-full text-left text-sm">
@@ -60,8 +63,25 @@
                     </thead>
                     <tbody class="divide-y divide-line">
                         @foreach ($links as $link)
+                            @php $shortUrl = request()->getScheme().'://'.config('nexo.short_host').'/'.$link->slug; @endphp
                             <tr>
-                                <td class="whitespace-nowrap px-4 py-3 font-medium text-ink">{{ config('nexo.short_host') }}/{{ $link->slug }}</td>
+                                <td class="whitespace-nowrap px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ $shortUrl }}" rel="noopener" class="font-medium text-link hover:text-link-hover hover:underline">{{ config('nexo.short_host') }}/{{ $link->slug }}</a>
+                                        {{-- Silent copy: the label itself is the confirmation, so nothing
+                                             pops up over the table on the action people repeat most. --}}
+                                        <button type="button"
+                                                class="nexo-btn nexo-btn--ghost nexo-btn--sm"
+                                                x-data="{ copied: false }"
+                                                data-url="{{ $shortUrl }}"
+                                                @click="navigator.clipboard?.writeText($el.dataset.url); copied = true; setTimeout(() => copied = false, 1600)">
+                                            <span aria-live="polite">
+                                                <span x-show="! copied">{{ __('Copy') }}</span>
+                                                <span x-show="copied" x-cloak>{{ __('Copied') }}</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
                                 <td class="px-4 py-3 text-muted">{{ \Illuminate\Support\Str::limit($link->target_url, 40) }}</td>
                                 <td class="px-4 py-3">
                                     @if ($link->is_active)
@@ -77,7 +97,7 @@
                                             <form method="POST" action="{{ route('links.deactivate', $link) }}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="rounded-md px-2 py-1 text-xs font-medium text-danger hover:bg-danger-subtle">
+                                                <button type="submit" class="inline-flex min-h-11 items-center rounded-md px-2 text-xs font-medium text-danger hover:bg-danger-subtle">
                                                     {{ __('Deactivate') }}
                                                 </button>
                                             </form>
@@ -89,6 +109,8 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="mt-6">{{ $links->links() }}</div>
         @endif
     </div>
 </x-panel-layout>

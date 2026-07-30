@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Link;
 use App\Models\User;
 use App\Support\SlugGenerator;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * The core link operations (ADR-007 service-layer boundary): create / list /
@@ -36,9 +36,9 @@ class LinkService
         $link->update(['is_active' => false]);
     }
 
-    /** @return Collection<int, Link> */
-    public function forUser(User $user): Collection
+    /** @return LengthAwarePaginator<int, Link> */
+    public function forUser(User $user): LengthAwarePaginator
     {
-        return $user->links()->latest()->get();
+        return $user->links()->latest()->paginate(25)->withQueryString();
     }
 }

@@ -96,3 +96,26 @@ it('AC-17: the LinkService creates and deactivates without any HTTP context', fu
 
     expect($service->forUser($user))->toHaveCount(1);
 });
+
+it('renders each short link as an anchor with a copy control', function () {
+    // The one action a shortener exists for. It used to be plain text in the
+    // cell: not openable, not copyable, nothing to click.
+    $user = User::factory()->create();
+    Link::factory()->for($user)->create(['slug' => 'openme']);
+
+    $html = $this->actingAs($user)->get(panelUrl('panel'))->assertOk()->getContent();
+
+    $host = preg_quote((string) config('nexo.short_host'), '/');
+    expect(preg_match('/<a href="https?:\/\/'.$host.'\/openme"/', $html))
+        ->toBe(1, 'The short link is not an anchor.');
+    expect(str_contains($html, __('Copy')))->toBeTrue('There is no copy control for the short link.');
+});
+
+it('paginates the link list instead of growing without a bound', function () {
+    $user = User::factory()->create();
+    Link::factory()->for($user)->count(26)->create();
+
+    $html = $this->actingAs($user)->get(panelUrl('panel'))->assertOk()->getContent();
+
+    expect(str_contains($html, 'page=2'))->toBeTrue('The list is not paginated.');
+});
