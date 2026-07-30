@@ -10,11 +10,11 @@
         <h1 class="text-2xl font-semibold text-ink">{{ __('Your links') }}</h1>
 
         @if (session('status'))
-            <p class="mt-4 inline-block rounded-md bg-success/10 px-3 py-1.5 text-sm font-medium text-success">{{ session('status') }}</p>
+            <p class="mt-4 inline-block rounded-md bg-success-subtle px-3 py-1.5 text-sm font-medium text-success-subtle-fg">{{ session('status') }}</p>
         @endif
 
         @if ($errors->any())
-            <ul class="mt-4 list-disc space-y-1 rounded-md bg-danger/10 py-3 pl-8 pr-3 text-sm text-danger">
+            <ul class="mt-4 list-disc space-y-1 rounded-md bg-danger-subtle py-3 pl-8 pr-3 text-sm text-danger-subtle-fg">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -27,12 +27,12 @@
             <div>
                 <label for="target_url" class="block text-sm font-medium text-muted">{{ __('Destination URL') }}</label>
                 <input id="target_url" type="url" name="target_url" value="{{ old('target_url') }}" placeholder="https://…" required
-                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-subtle focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
             </div>
             <div>
                 <label for="custom_slug" class="block text-sm font-medium text-muted">{{ __('Custom slug (optional)') }}</label>
                 <input id="custom_slug" type="text" name="custom_slug" value="{{ old('custom_slug') }}" placeholder="my-link"
-                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-subtle focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                       class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
             </div>
             <button type="submit" class="nexo-btn nexo-btn--primary">{{ __('Create') }}</button>
         </form>
@@ -42,7 +42,7 @@
         @else
             <div class="mt-8 overflow-x-auto rounded-2xl border border-line">
                 <table class="w-full text-left text-sm">
-                    <thead class="bg-bg-subtle text-subtle">
+                    <thead class="bg-bg-subtle text-muted">
                         <tr>
                             <th class="px-4 py-3 font-medium">{{ __('Short link') }}</th>
                             <th class="px-4 py-3 font-medium">{{ __('Target') }}</th>
@@ -57,19 +57,19 @@
                                 <td class="px-4 py-3 text-muted">{{ \Illuminate\Support\Str::limit($link->target_url, 40) }}</td>
                                 <td class="px-4 py-3">
                                     @if ($link->is_active)
-                                        <span class="inline-block rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">{{ __('Active') }}</span>
+                                        <span class="inline-block rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-success-subtle-fg">{{ __('Active') }}</span>
                                     @else
-                                        <span class="inline-block rounded-full bg-danger/10 px-2.5 py-0.5 text-xs font-medium text-danger">{{ __('Inactive') }}</span>
+                                        <span class="inline-block rounded-full bg-danger-subtle px-2.5 py-0.5 text-xs font-medium text-danger-subtle-fg">{{ __('Inactive') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
-                                        <a href="{{ route('links.stats', $link) }}" class="font-medium text-brand-700 hover:underline dark:text-brand-400">{{ __('Stats') }}</a>
+                                        <a href="{{ route('links.stats', $link) }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Stats') }}</a>
                                         @if ($link->is_active)
                                             <form method="POST" action="{{ route('links.deactivate', $link) }}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="rounded-md px-2 py-1 text-xs font-medium text-danger hover:bg-danger/10">
+                                                <button type="submit" class="rounded-md px-2 py-1 text-xs font-medium text-danger hover:bg-danger-subtle">
                                                     {{ __('Deactivate') }}
                                                 </button>
                                             </form>

@@ -12,7 +12,7 @@
 @else
     <x-panel-layout :title="$title" :noindex="true">
         <div class="mx-auto flex max-w-xl flex-col items-center px-6 py-20 text-center sm:py-28">
-            <p class="text-6xl font-bold tabular-nums text-brand-700 dark:text-brand-400">{{ $code }}</p>
+            <p class="text-6xl font-bold tabular-nums text-primary">{{ $code }}</p>
             <h1 class="mt-4 text-2xl font-semibold text-ink">{{ $title }}</h1>
             <p class="mt-2 text-muted">{{ $message }}</p>
 

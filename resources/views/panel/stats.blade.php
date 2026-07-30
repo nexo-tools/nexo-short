@@ -19,11 +19,11 @@
         {{-- KPI tiles --}}
         <div class="mt-6 flex flex-wrap gap-4">
             <div class="min-w-32 flex-1 rounded-xl border border-line bg-surface-raised p-4">
-                <div class="text-xs text-subtle">{{ __('Total clicks') }}</div>
+                <div class="text-xs text-muted">{{ __('Total clicks') }}</div>
                 <div class="mt-1 text-3xl font-bold text-ink">{{ number_format($stats['total']) }}</div>
             </div>
             <div class="min-w-32 flex-1 rounded-xl border border-line bg-surface-raised p-4">
-                <div class="text-xs text-subtle">{{ __('Unique visitors') }}</div>
+                <div class="text-xs text-muted">{{ __('Unique visitors') }}</div>
                 <div class="mt-1 text-3xl font-bold text-ink">{{ number_format($stats['unique']) }}</div>
             </div>
         </div>
@@ -31,9 +31,9 @@
         {{-- Bot filter --}}
         <p class="mt-5">
             @if ($excludeBots)
-                <a href="{{ route('links.stats', $link) }}" class="text-sm font-medium text-brand-700 hover:underline dark:text-brand-400">{{ __('Include bots') }}</a>
+                <a href="{{ route('links.stats', $link) }}" class="text-sm font-medium text-link hover:text-link-hover hover:underline">{{ __('Include bots') }}</a>
             @else
-                <a href="{{ route('links.stats', [$link, 'exclude_bots' => 1]) }}" class="text-sm font-medium text-brand-700 hover:underline dark:text-brand-400">{{ __('Exclude bots') }}</a>
+                <a href="{{ route('links.stats', [$link, 'exclude_bots' => 1]) }}" class="text-sm font-medium text-link hover:text-link-hover hover:underline">{{ __('Exclude bots') }}</a>
             @endif
         </p>
 
@@ -42,7 +42,7 @@
         @if ($stats['total'] === 0)
             <p class="mt-2 text-muted">{{ __('No clicks yet.') }}</p>
         @else
-            <svg viewBox="0 0 {{ $w }} {{ $h }}" width="100%" height="{{ $h }}" role="img" class="mt-3 text-brand-600 dark:text-brand-400">
+            <svg viewBox="0 0 {{ $w }} {{ $h }}" width="100%" height="{{ $h }}" role="img" class="mt-3 text-primary">
                 @foreach (array_values($perDay) as $i => $c)
                     @php $bh = $max > 0 ? ($c / $max) * ($h - 10) : 0; @endphp
                     <rect x="{{ round($i * ($barW + $gap), 2) }}" y="{{ round($h - $bh, 2) }}"
@@ -58,10 +58,10 @@
                         <h3 class="text-sm font-medium text-muted">{{ $section['label'] }}</h3>
                         @forelse ($section['rows'] as $key => $count)
                             <div class="flex items-center justify-between border-b border-line py-1.5 text-sm">
-                                <span class="text-ink">{{ $key }}</span><span class="text-subtle">{{ $count }}</span>
+                                <span class="text-ink">{{ $key }}</span><span class="text-muted">{{ $count }}</span>
                             </div>
                         @empty
-                            <p class="mt-1 text-sm text-subtle">—</p>
+                            <p class="mt-1 text-sm text-muted">—</p>
                         @endforelse
                     </div>
                 @endforeach

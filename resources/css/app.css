@@ -57,6 +57,18 @@
     --color-subtle: var(--nexo-text-subtle);
     --color-line: var(--nexo-border);
     --color-line-strong: var(--nexo-border-strong);
+    /* Borders of interactive controls answer to WCAG 1.4.11 (3:1), not to the
+       decorative border scale — hence a token of its own. */
+    --color-control: var(--nexo-border-control);
+    --color-primary: var(--nexo-primary);
+    --color-primary-fg: var(--nexo-primary-fg);
+    --color-ring: var(--nexo-ring);
+    --color-link: var(--nexo-link);
+    --color-link-hover: var(--nexo-link-hover);
     --color-success: var(--nexo-success);
+    --color-success-subtle: var(--nexo-success-subtle);
+    --color-success-subtle-fg: var(--nexo-success-subtle-fg);
     --color-danger: var(--nexo-danger);
+    --color-danger-subtle: var(--nexo-danger-subtle);
+    --color-danger-subtle-fg: var(--nexo-danger-subtle-fg);
 }
