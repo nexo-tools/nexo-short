@@ -27,7 +27,7 @@
         .links a { color: #a3a3a3; text-decoration: none; }
         .links a:hover { color: #c4b5fd; }
         .attribution { margin-top: auto; padding-top: 2rem; font-size: .8rem; }
-        .attribution a { color: #737373; text-decoration: none; }
+        .attribution a { color: #8a8a8a; text-decoration: none; }
     </style>
 </head>
 <body>

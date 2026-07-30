@@ -2,8 +2,8 @@
     <h1>{{ __('Report a link') }}</h1>
 
     @if ($sent)
-        <p class="pill pill-on" style="display: inline-block;">{{ __('Thank you — your report has been received.') }}</p>
-        <p style="margin-top: 1.5rem;"><a href="{{ '//'.config('nexo.panel_host') }}">{{ config('app.name') }}</a></p>
+        <p class="pill pill-on" role="status">{{ __('Thank you — your report has been received.') }}</p>
+        <p class="follow-up"><a href="{{ '//'.config('nexo.panel_host') }}">{{ config('app.name') }}</a></p>
     @else
         @if ($invalid)
             <p class="errors">{{ __('Please provide the link and a reason.') }}</p>

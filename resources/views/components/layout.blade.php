@@ -25,7 +25,7 @@
         form { display: flex; flex-direction: column; gap: .9rem; }
         label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; color: #d4d4d4; }
         input, textarea, select {
-            padding: .6rem .7rem; border-radius: .5rem; border: 1px solid #333;
+            padding: .6rem .7rem; border-radius: .5rem; border: 1px solid #525252;
             background: #141414; color: #fafafa; font-size: 1rem; font-family: inherit;
         }
         button {
@@ -37,12 +37,13 @@
         .errors { color: #fca5a5; font-size: .9rem; margin: 0 0 1rem; padding-left: 1.1rem; }
         .row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
         table { width: 100%; border-collapse: collapse; font-size: .92rem; }
-        th, td { text-align: left; padding: .55rem .5rem; border-bottom: 1px solid #262626; }
+        th, td { text-align: left; padding: .55rem .5rem; border-bottom: 1px solid #404040; }
         .attribution { margin-top: 2rem; font-size: .8rem; }
-        .attribution a { color: #737373; text-decoration: none; }
-        .pill { font-size: .72rem; padding: .1rem .5rem; border-radius: 1rem; }
+        .attribution a { color: #8a8a8a; text-decoration: none; }
+        .pill { display: inline-block; font-size: .72rem; padding: .1rem .5rem; border-radius: 1rem; }
         .pill-on { background: #14532d; color: #86efac; }
         .pill-off { background: #3f1d1d; color: #fca5a5; }
+        .follow-up { margin-top: 1.5rem; }
     </style>
 </head>
 <body>
