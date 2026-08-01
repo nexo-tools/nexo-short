@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SetLocale
 {
     /** @var list<string> */
-    private const SUPPORTED = ['en', 'es', 'pt'];
+    private const SUPPORTED = ['es', 'en', 'pt'];
 
     /**
      * Resolve the request locale from ?lang=, then the shared `nexo-lang` cookie
