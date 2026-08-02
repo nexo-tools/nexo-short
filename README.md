@@ -52,7 +52,8 @@ production**: redirects on **nxo.li**, panel on
 
 ## Screenshots
 
-Captured from the live instance.
+Captured from a local instance seeded with `DemoSeeder`, by
+`node ~/alvaro/scripts/nexo-shots.mjs .` — never from production.
 
 | Light | Dark |
 | --- | --- |
