@@ -39,7 +39,8 @@ Route::middleware('setlocale')->group(function () {
         // The login page stays reachable in every mode (it hosts the SSO button);
         // the local credential POST is closed when the instance is SSO-only.
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
-        Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware(EnsureLocalAuth::class);
+        Route::post('login', [AuthenticatedSessionController::class, 'store'])
+            ->middleware([EnsureLocalAuth::class, 'throttle:login-ip']);
 
         // Registration: off in SSO-only mode, and otherwise closable by env
         // (self-host default open; hosted instance keeps it closed).

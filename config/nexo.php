@@ -131,6 +131,12 @@ return [
         'per_ip' => (int) env('NEXO_CREATE_RATE_PER_IP', 20),
     ],
 
+    // Sign-in attempts per IP per minute. Complements the per-credential
+    // lockout in LoginRequest, which is blind to one IP trying many accounts.
+    'login_rate' => [
+        'per_ip' => env('NEXO_LOGIN_RATE_PER_IP', 20),
+    ],
+
     'report_rate' => [
         'per_ip' => (int) env('NEXO_REPORT_RATE_PER_IP', 5),
     ],

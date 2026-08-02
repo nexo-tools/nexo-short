@@ -35,6 +35,14 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        // Sign-in attempts, per IP. The LoginRequest already locks out an
+        // email+IP pair after five tries, which does nothing against somebody
+        // spraying one password across many addresses from one machine — that
+        // is what this catches. Env-tunable like every other limit here.
+        RateLimiter::for('login-ip', fn (Request $request) => Limit::perMinute(
+            (int) config('nexo.login_rate.per_ip')
+        )->by('login-ip:'.$request->ip()));
+
         // The public report form is rate-limited per IP (ADR-005 §7).
         RateLimiter::for('report', function (Request $request) {
             return Limit::perMinute((int) config('nexo.report_rate.per_ip'))->by('rp-ip:'.$request->ip());
