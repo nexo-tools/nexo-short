@@ -19,6 +19,11 @@ it('has no hardcoded hex colors in blade views or app css (use --nexo-* tokens)'
     //    PANEL surfaces, error pages included, must still use var(--nexo-*).
     $allowed = ['nexo-tokens.css', 'nexo-ui.css', 'nexo-seo.blade.php', 'layout.blade.php', 'short-error-layout.blade.php'];
 
+    // Directories allowed to contain literal hex, relative to resource_path():
+    // mail clients strip <style> and know nothing about the tokens, so the
+    // family mail template inlines hex on purpose (templates/nexo-mail/README).
+    $allowedPrefixes = ['views/emails/'];
+
     $offenders = [];
     foreach ($roots as $root) {
         foreach (new Walk(new Dir($root, FilesystemIterator::SKIP_DOTS)) as $file) {
@@ -27,6 +32,12 @@ it('has no hardcoded hex colors in blade views or app css (use --nexo-* tokens)'
             }
             if (in_array($file->getFilename(), $allowed, true)) {
                 continue;
+            }
+            $relative = str_replace(resource_path().'/', '', $file->getPathname());
+            foreach ($allowedPrefixes as $prefix) {
+                if (str_starts_with($relative, $prefix)) {
+                    continue 2;
+                }
             }
             $contents = file_get_contents($file->getPathname());
             if (preg_match_all('/#[0-9a-fA-F]{3,8}\b/', $contents, $m)) {

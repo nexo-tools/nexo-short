@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\ResetPasswordQueued;
+use App\Notifications\VerifyEmailQueued;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -37,5 +38,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * The account mails, queued and in this product's template, with the locale
+     * pinned at dispatch (family rules C2 and C3). This tool had no mail at all
+     * until 2026-08-02 — a local account that forgot its password was stuck.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify((new ResetPasswordQueued($token))->locale(app()->getLocale()));
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify((new VerifyEmailQueued)->locale(app()->getLocale()));
     }
 }

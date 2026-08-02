@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\LinkReported;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +42,13 @@ class ReportController extends Controller
             ], 422);
         }
 
-        Report::create($validator->validated() + ['created_at' => now()]);
+        $report = Report::create($validator->validated() + ['created_at' => now()]);
+
+        // The backlog item ADR-005 left open. A report used to be a row in a
+        // table nobody polled, which for an abuse channel means it may as well
+        // not exist. The form stays anonymous and gets no acknowledgement of
+        // its own: the mail goes to the operator, never back to the reporter.
+        Mail::to(config('nexo.support_email'))->queue(new LinkReported($report));
 
         return response()->view('report', ['slug' => '', 'sent' => true, 'invalid' => false]);
     }

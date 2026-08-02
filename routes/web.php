@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\LegalController;
@@ -44,10 +47,34 @@ Route::middleware('setlocale')->group(function () {
             Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
             Route::post('register', [RegisteredUserController::class, 'store'])->middleware('throttle:10,1');
         });
+
+        // Password recovery, local accounts only. This tool shipped without it:
+        // a self-hosted instance in local mode had no way back from a forgotten
+        // password except the operator editing the database. On the hosted
+        // instance the account lives in Nexo ID and recovery belongs there, so
+        // the whole flow rides EnsureLocalAuth with the credential login.
+        Route::middleware(EnsureLocalAuth::class)->group(function () {
+            Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+            Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+                ->middleware('throttle:5,1')->name('password.email');
+
+            Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+            Route::post('reset-password', [NewPasswordController::class, 'store'])
+                ->middleware('throttle:5,1')->name('password.store');
+        });
     });
 
     Route::middleware('auth')->group(function () {
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+        // Email verification. Not middleware on the panel: shortening a link is
+        // the product, and gating it on an unread mail would be our problem,
+        // not the person's. It is what makes the reset path trustworthy.
+        Route::get('verify-email', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+        Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+            ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+        Route::post('verify-email/send', [EmailVerificationController::class, 'send'])
+            ->middleware('throttle:6,1')->name('verification.send');
 
         // Panel: list / create / deactivate links over the LinkService (ADR-007).
         Route::get('panel', [LinkController::class, 'index'])->name('panel');

@@ -114,8 +114,17 @@ cd ~/domains/nxo.li && rm -rf public_html && ln -s ~/domains/nxo.li/nexo-short/p
 # panel subdomain docroot (path depends on how the subdomain was created in hPanel):
 rm -rf ~/domains/alvarocdev.com/public_html/nexoshort && ln -s ~/domains/nxo.li/nexo-short/public ~/domains/alvarocdev.com/public_html/nexoshort
 
-# cron (hPanel -> Cron Jobs), once:
+# cron (hPanel -> Cron Jobs), once. NOT optional since 2026-08-02: this tool
+# now sends mail (verification, password reset, security notices, abuse reports)
+# and every one of them is queued, drained by the scheduler. Without this entry
+# the app looks perfectly healthy and nothing is ever delivered.
 # * * * * * cd ~/domains/nxo.li/nexo-short && php artisan schedule:run >> /dev/null 2>&1
+
+# mail in .env — family sender convention, one address per tool (C1):
+#   MAIL_MAILER=smtp + the mailbox's host/port
+#   MAIL_FROM_ADDRESS="nexoshort@alvarocdev.com"
+#   MAIL_FROM_NAME="Nexo Short"
+#   NEXO_SUPPORT_EMAIL=<where abuse reports land>
 ```
 
 ## Updates
