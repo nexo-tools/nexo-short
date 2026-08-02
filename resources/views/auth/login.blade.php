@@ -38,17 +38,23 @@
                     </label>
                     <button type="submit" class="nexo-btn nexo-btn--primary w-full" :disabled="sending" :aria-busy="sending">{{ __('Sign in') }}</button>
                 </form>
+
+                <p class="mt-4 text-sm">
+                    <a href="{{ route('password.request') }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Forgot your password?') }}</a>
+                </p>
             @endif
 
             @if (config('nexo-sso.enabled'))
-                <p class="mt-4">
+                <div class="my-6 h-px bg-line" aria-hidden="true"></div>
+                <p>
                     <a href="{{ route('nexo-sso.redirect') }}" class="nexo-btn nexo-btn--ghost w-full">{{ __('Continue with Nexo ID') }}</a>
                 </p>
             @endif
 
             @if (config('nexo.auth_mode') !== 'sso' && config('nexo.allow_registration'))
                 <p class="mt-6 text-sm text-muted">
-                    <a href="{{ route('register') }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Create an account') }}</a>
+                    {{ __('Don\'t have an account?') }}
+                    <a href="{{ route('register') }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Create account') }}</a>
                 </p>
             @endif
         </x-nexo-auth-card>

@@ -16,22 +16,34 @@
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div>
-                    <label for="email" class="mb-1 block text-sm font-medium">{{ __('Email') }}</label>
+                    <label for="email" class="block text-sm font-medium text-muted">{{ __('Email') }}</label>
                     <input id="email" name="email" type="email" required autocomplete="username"
                            value="{{ old('email', $email) }}"
-                           class="w-full rounded-lg border border-control bg-surface px-3 py-2 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                           @error('email') aria-invalid="true" aria-describedby="email-error" @enderror
+                           class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                    @error('email')
+                        <p id="email-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label for="password" class="mb-1 block text-sm font-medium">{{ __('New password') }}</label>
+                    <label for="password" class="block text-sm font-medium text-muted">{{ __('New password') }}</label>
                     <input id="password" name="password" type="password" required autocomplete="new-password"
-                           class="w-full rounded-lg border border-control bg-surface px-3 py-2 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                           @error('password') aria-invalid="true" aria-describedby="password-error" @enderror
+                           class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                    @error('password')
+                        <p id="password-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="mb-1 block text-sm font-medium">{{ __('Confirm the new password') }}</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-muted">{{ __('Confirm the new password') }}</label>
                     <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password"
-                           class="w-full rounded-lg border border-control bg-surface px-3 py-2 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                           @error('password_confirmation') aria-invalid="true" aria-describedby="password_confirmation-error" @enderror
+                           class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                    @error('password_confirmation')
+                        <p id="password_confirmation-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <button type="submit" class="nexo-btn nexo-btn--primary w-full">{{ __('Change my password') }}</button>

@@ -23,10 +23,14 @@
                 @csrf
 
                 <div>
-                    <label for="email" class="mb-1 block text-sm font-medium">{{ __('Email') }}</label>
+                    <label for="email" class="block text-sm font-medium text-muted">{{ __('Email') }}</label>
                     <input id="email" name="email" type="email" required autofocus autocomplete="username"
                            value="{{ old('email') }}"
-                           class="w-full rounded-lg border border-control bg-surface px-3 py-2 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                           @error('email') aria-invalid="true" aria-describedby="email-error" @enderror
+                           class="mt-1 min-h-11 w-full rounded-md border border-control bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring">
+                    @error('email')
+                        <p id="email-error" class="mt-1 text-sm text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <button type="submit" class="nexo-btn nexo-btn--primary w-full">{{ __('Send the link') }}</button>
