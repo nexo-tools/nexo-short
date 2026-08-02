@@ -7,7 +7,11 @@
 it('leads with what the tool does, not with its own name', function () {
     $html = $this->get(panelUrl('/'))->assertOk()->getContent();
 
-    expect(preg_match('/<h1[^>]*>\s*'.preg_quote(__('Short links on your own domain'), '/').'\s*<\/h1>/', $html))
+    // The claim is not written here: its Spanish IS the tool's tagline in
+    // config/nexo-ecosystem.php, so the switcher, the cards, alvarocdev and
+    // this page all say one sentence (design.md, "Copy"; nexo-doctor checks
+    // the equality). This test only guards that the h1 is that claim.
+    expect(preg_match('/<h1[^>]*>\s*'.preg_quote(__('Shorten links with cookieless metrics.'), '/').'\s*<\/h1>/', $html))
         ->toBe(1, 'The h1 is not the value proposition.');
 });
 

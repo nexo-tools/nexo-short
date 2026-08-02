@@ -5,6 +5,9 @@
 @import './nexo-tokens.css';
 @import './nexo-ui.css';
 
+/* The public landing's own layer (Hallmark stamp lives at its first line). */
+@import './landing.css';
+
 /* Dark utilities follow the stamped [data-theme="dark"] (theme-init + toggle),
    not prefers-color-scheme — so an explicit choice wins over the OS. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
