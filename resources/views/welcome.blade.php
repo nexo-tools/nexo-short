@@ -68,7 +68,7 @@
         @auth
             <a href="{{ route('panel') }}" class="nexo-btn nexo-btn--ghost">{{ __('Your links') }}</a>
         @else
-            <a href="{{ route('login') }}" class="nexo-btn nexo-btn--ghost">{{ __('Sign in') }}</a>
+            <a href="{{ route('login') }}" class="nexo-btn nexo-btn--ghost nexo-header__auth">{{ __('Sign in') }}</a>
         @endauth
     </x-slot:actions>
 
