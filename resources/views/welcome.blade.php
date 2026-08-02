@@ -101,16 +101,27 @@
             <div class="mt-10 space-y-10 sm:mt-12 sm:space-y-12">
                 @foreach ($steps as $step)
                     <figure>
-                        {{-- Both themes ship; landing.css shows the one that
-                             matches [data-theme]. width/height are the real
-                             pixels of the file, so nothing reflows on load. --}}
-                        <img class="landing-shot--light w-full rounded-xl border border-line"
+                        {{-- Four files per figure: theme × viewport. Both themes
+                             ship because landing.css shows the one that matches
+                             [data-theme]; both viewports ship because a 1280×800
+                             capture shrunk to a phone is not the "legible without
+                             zoom" STANDARD.md asks for. width/height are the real
+                             pixels of each file, so nothing reflows on load. --}}
+                        <img class="landing-shot landing-shot--desktop landing-shot--light w-full rounded-xl border border-line"
                              src="/landing/{{ $step['shot'] }}-light.webp"
                              width="1280" height="800" loading="lazy" decoding="async"
                              alt="{{ $step['caption'] }}">
-                        <img class="landing-shot--dark w-full rounded-xl border border-line"
+                        <img class="landing-shot landing-shot--desktop landing-shot--dark w-full rounded-xl border border-line"
                              src="/landing/{{ $step['shot'] }}-dark.webp"
                              width="1280" height="800" loading="lazy" decoding="async"
+                             alt="{{ $step['caption'] }}">
+                        <img class="landing-shot landing-shot--mobile landing-shot--light w-full rounded-xl border border-line"
+                             src="/landing/{{ $step['shot'] }}-mobile-light.webp"
+                             width="390" height="844" loading="lazy" decoding="async"
+                             alt="{{ $step['caption'] }}">
+                        <img class="landing-shot landing-shot--mobile landing-shot--dark w-full rounded-xl border border-line"
+                             src="/landing/{{ $step['shot'] }}-mobile-dark.webp"
+                             width="390" height="844" loading="lazy" decoding="async"
                              alt="{{ $step['caption'] }}">
                         <figcaption class="mt-3 text-sm text-muted">{{ $step['caption'] }}</figcaption>
                     </figure>

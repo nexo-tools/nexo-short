@@ -41,6 +41,37 @@
       "auth": true
     },
     {
+      "_comment": "producto step 1, on the phone. A 1280×800 capture shrunk to ~340px is not the \"legible without zoom\" STANDARD.md asks for, so every figure ships a 390×844 twin and landing.css picks by media query.",
+      "name": "crear-mobile",
+      "path": "/panel",
+      "viewport": { "width": 390, "height": 844 },
+      "themes": ["light", "dark"],
+      "out": "public/landing/shot-1-mobile",
+      "fullPage": false,
+      "auth": true
+    },
+    {
+      "_comment": "producto step 2, on the phone — same scrollTo as its desktop twin, so the figure frames the list and not the form.",
+      "name": "tabla-mobile",
+      "path": "/panel",
+      "viewport": { "width": 390, "height": 844 },
+      "themes": ["light", "dark"],
+      "out": "public/landing/shot-2-mobile",
+      "fullPage": false,
+      "auth": true,
+      "scrollTo": "table"
+    },
+    {
+      "_comment": "producto step 3, on the phone.",
+      "name": "stats-mobile",
+      "path": "/links/5/stats",
+      "viewport": { "width": 390, "height": 844 },
+      "themes": ["light", "dark"],
+      "out": "public/landing/shot-3-mobile",
+      "fullPage": false,
+      "auth": true
+    },
+    {
       "_comment": "Mobile-first: the gate's evidence is the landing at 375px, light and dark (STANDARD.md).",
       "name": "landing-mobile",
       "path": "/",
