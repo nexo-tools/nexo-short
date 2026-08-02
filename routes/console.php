@@ -16,7 +16,12 @@ Artisan::command('inspire', function () {
  *
  * This tool's first mail arrived on 2026-08-02 and every one of them is queued
  * (family rule C2), so without this line nothing is ever delivered.
+ *
+ * The drain runs INLINE (Schedule::call + Artisan::call), never as a
+ * Schedule::command subprocess: proc_open/exec are disabled on this hosting
+ * and a scheduled subprocess dies before it starts.
  */
-Schedule::command('queue:work --stop-when-empty --tries=3 --max-time=55')
+Schedule::call(fn () => Artisan::call('queue:work --stop-when-empty --tries=3 --max-time=55'))
+    ->name('queue-drain')
     ->everyMinute()
     ->withoutOverlapping();
