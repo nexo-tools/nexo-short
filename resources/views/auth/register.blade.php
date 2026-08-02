@@ -1,7 +1,7 @@
 <x-panel-layout :title="__('Create an account')">
     <div class="mx-auto flex w-full max-w-md flex-col justify-center px-4 py-10 sm:py-16">
-        <div class="rounded-2xl border border-line bg-surface-raised p-6 shadow-sm sm:p-8">
-            <h1 class="text-2xl font-semibold text-ink">{{ __('Create an account') }}</h1>
+        <x-nexo-auth-card>
+            <h1 class="text-xl font-semibold text-ink">{{ __('Create an account') }}</h1>
 
             @if ($errors->any())
                 <ul role="alert" class="mt-4 list-disc space-y-1 rounded-md bg-danger-subtle py-3 pl-8 pr-3 text-sm text-danger-subtle-fg">
@@ -55,6 +55,6 @@
             <p class="mt-6 text-sm text-muted">
                 <a href="{{ route('login') }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Already have an account? Sign in') }}</a>
             </p>
-        </div>
+        </x-nexo-auth-card>
     </div>
 </x-panel-layout>
