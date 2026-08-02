@@ -17,6 +17,18 @@ use Illuminate\Support\Facades\Route;
 
 $codes = [403, 404, 419, 429, 500, 503];
 
+// The short host serves its errors with the self-contained minimal shell — no
+// chrome, no tokens, no build (ADR-001), guarded by HostChromeIsolationTest. So
+// the chrome assertions run against the panel host, which is where a person
+// with a session actually lands.
+const ISOLATED_ERROR_HOSTS = [];
+
+/** The URL whose 404 must carry the tool chrome: the panel host. */
+function chromeErrorUrl(string $path): string
+{
+    return panelUrl($path);
+}
+
 it('ships an error view for every code the standard requires', function () use ($codes) {
     $missing = array_values(array_filter(
         $codes,
@@ -37,14 +49,22 @@ it('keeps every error page translatable and free of template placeholders', func
 });
 
 it('serves a branded 404 on the panel host instead of the framework default', function () {
-    $html = $this->get(panelUrl('/this-path-does-not-exist-'.uniqid()))
+    $url = chromeErrorUrl('/this-path-does-not-exist-'.uniqid());
+
+    $html = $this->get($url)
         ->assertNotFound()
         ->getContent();
 
     // The chrome renders, so the page belongs to the product.
     expect($html)->toContain('404')
         ->and($html)->toContain('nexo-header')
+        ->and($html)->toContain('nexo-footer')
         ->and($html)->not->toContain('Whoops, looks like something went wrong');
+
+    // And it stays out of the index. Asserting the rendered meta (not the
+    // include) also catches a head that quietly ignores the noindex flag.
+    expect(preg_match('/<meta[^>]+name=["\']robots["\'][^>]+noindex/i', $html))
+        ->toBe(1, 'The 404 is missing <meta name="robots" content="noindex">.');
 });
 
 it('serves the legal pages and links them from each other', function () {
