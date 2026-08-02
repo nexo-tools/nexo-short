@@ -56,8 +56,13 @@
             </div>
         @else
             <div class="mt-8 overflow-x-auto rounded-2xl border border-line">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-bg-subtle text-muted">
+                {{-- One markup, two shapes (mobile-first, STANDARD.md): below sm
+                     each row becomes a stacked card, because a ~990px table on a
+                     375px screen only "works" by hiding Status and Actions behind
+                     an inner scroll nobody finds. From sm up it is the same
+                     four-column table as always. --}}
+                <table class="block w-full text-left text-sm sm:table">
+                    <thead class="hidden bg-bg-subtle text-muted sm:table-header-group">
                         <tr>
                             <th class="px-4 py-3 font-medium">{{ __('Short link') }}</th>
                             <th class="px-4 py-3 font-medium">{{ __('Target') }}</th>
@@ -65,11 +70,11 @@
                             <th class="px-4 py-3 font-medium">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-line">
+                    <tbody class="block divide-y divide-line sm:table-row-group">
                         @foreach ($links as $link)
                             @php $shortUrl = request()->getScheme().'://'.config('nexo.short_host').'/'.$link->slug; @endphp
-                            <tr>
-                                <td class="whitespace-nowrap px-4 py-3">
+                            <tr class="block px-4 py-3 sm:table-row sm:p-0">
+                                <td class="block sm:table-cell sm:whitespace-nowrap sm:px-4 sm:py-3">
                                     <div class="flex items-center gap-2">
                                         <a href="{{ $shortUrl }}" rel="noopener" class="font-medium text-link hover:text-link-hover hover:underline">{{ config('nexo.short_host') }}/{{ $link->slug }}</a>
                                         {{-- Silent copy: the label itself is the confirmation, so nothing
@@ -86,15 +91,15 @@
                                         </button>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-muted">{{ \Illuminate\Support\Str::limit($link->target_url, 40) }}</td>
-                                <td class="px-4 py-3">
+                                <td class="block break-all pt-1 text-muted sm:table-cell sm:break-normal sm:px-4 sm:py-3">{{ \Illuminate\Support\Str::limit($link->target_url, 40) }}</td>
+                                <td class="block pt-2 sm:table-cell sm:px-4 sm:py-3">
                                     @if ($link->is_active)
                                         <span class="inline-block rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-success-subtle-fg">{{ __('Active') }}</span>
                                     @else
                                         <span class="inline-block rounded-full bg-danger-subtle px-2.5 py-0.5 text-xs font-medium text-danger-subtle-fg">{{ __('Inactive') }}</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="block pt-1 sm:table-cell sm:px-4 sm:py-3">
                                     <div class="flex items-center gap-3">
                                         <a href="{{ route('links.stats', $link) }}" class="font-medium text-link hover:text-link-hover hover:underline">{{ __('Stats') }}</a>
                                         @if ($link->is_active)
