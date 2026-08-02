@@ -23,6 +23,7 @@
 
 use App\Mail\LinkReported;
 use App\Mail\NexoIdLinked;
+use App\Mail\OperatorAlert;
 use App\Mail\PasswordChanged;
 use App\Models\Report;
 use App\Models\User;
@@ -44,6 +45,9 @@ function nexoMails(): array
 {
     // This tool had no mail at all until 2026-08-02.
     return [
+        // The operator alert renders like any other mail: it is here because the
+        // one mail nobody declared was the one that shipped broken.
+        'operator-alert' => fn () => OperatorAlert::fromThrowable(new RuntimeException('something broke'), 'https://example.test/x'),
         'verify-email' => fn () => [new VerifyEmailQueued, User::factory()->unverified()->create()],
         'reset-password' => fn () => [new ResetPasswordQueued('raw-reset-token'), User::factory()->create()],
         'password-changed' => fn () => new PasswordChanged(User::factory()->create()),
@@ -68,7 +72,7 @@ function nexoOperatorMails(): array
 {
     // Goes to whoever runs the instance, with the artisan command they will
     // want next. Deliberately English (ADR-005 §7).
-    return ['link-reported'];
+    return ['link-reported', 'operator-alert'];
 }
 
 /**
