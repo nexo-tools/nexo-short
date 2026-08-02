@@ -30,4 +30,11 @@
 
 @include('partials.beacon')
 
+{{-- The self-hosted family face (design.md). Building the woff2 files is not
+     enough: @vite does not emit their @font-face, Vite::fonts() does — without
+     this line the browser downloads nothing and everything falls back to the
+     system stack. It renders a preload + an inline <style>, which the panel CSP
+     already covers (font-src 'self', style-src 'unsafe-inline'). --}}
+{{ Vite::fonts() }}
+
 @vite(['resources/css/app.css', 'resources/js/app.js'])
