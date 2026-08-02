@@ -29,8 +29,8 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    /* System fonts only — zero external requests (from nexo-tokens.css). */
-    --font-sans: var(--nexo-font-sans);
+    /* Family face (design.md): self-hosted Instrument Sans; system stack as fallback. */
+    --font-sans: 'Instrument Sans', var(--nexo-font-sans);
     --font-mono: var(--nexo-font-mono);
 
     /* Brand scale → Nexo violet tokens (see nexo-tokens.css / BRAND.md). */
