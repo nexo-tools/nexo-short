@@ -13,7 +13,7 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: mbstring, intl, pdo_sqlite
           coverage: none
 
@@ -45,9 +45,7 @@ jobs:
       - name: Translations (check in sync)
         run: node scripts/generate-translations.mjs --check
 
-      # The deploy builds assets; with auto-deploy on push, a broken build has to
-      # fail here and not on the way to production.
-      - name: Build front-end assets
+      - name: Build assets
         run: npm run build
 
       - name: Pest (tests)
